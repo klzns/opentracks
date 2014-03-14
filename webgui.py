@@ -6,30 +6,9 @@ import urllib
 import gtk
 import gobject
 
-try:
-    import webkit
-    have_webkit = True
-except:
-    have_webkit = False
-
-try:
-    import gtkmozembed
-    have_gtkmozembed = True
-except:
-    have_gtkmozembed = False
+import webkit
 
 class UseWebKit: pass
-class UseGtkMozEmbed: pass
-
-if False: pass
-elif have_webkit:
-    use = UseWebKit
-elif have_gtkmozembed:
-    use = UseGtkMozEmbed
-else:
-    raise Exception('Failed to load any of webkit and gtkmozembed modules')
-
-#use = UseGtkMozEmbed # <- choose your desired implementation here
 
 class WebKitMethods(object):
 
@@ -48,44 +27,7 @@ class WebKitMethods(object):
 
     @staticmethod
     def open_uri(browser, uri):
-        browser.open(uri)
-
-
-
-
-
-class GtkMozEmbedMethods(object):
-
-    @staticmethod
-    def create_browser():
-        return gtkmozembed.MozEmbed()
-
-    @staticmethod
-    def inject_javascript(browser, script):
-        uri = 'javascript:%s' % urllib.quote(script + '\n;void(0);')
-        browser.load_url(uri)
-
-    @staticmethod
-    def connect_title_changed(browser, callback):
-        # XXX: probably you should cross your fingers and hope browser
-        #      isn't sending title messages too quickly...?
-        def callback_wrapper(*args): callback(browser.get_title())
-        browser.connect('title', callback_wrapper)
-
-    @staticmethod
-    def open_uri(browser, uri):
-        browser.load_url(uri)
-
-
-
-if use is UseWebKit:
-    implementation = WebKitMethods
-
-if use is UseGtkMozEmbed:
-    implementation = GtkMozEmbedMethods
-
-
-
+        browser.load_uri(uri)
 
 
 
@@ -115,10 +57,13 @@ def synchronous_gtk_message(fun):
 
     return fun2
 
+def load_html(browser, html, uri):
+    browser.load_string(html, 'text/html', 'UTF-8', uri)
+
 def launch_browser(uri, quit_function=None, echo=True):
 
     window = gtk.Window()
-    browser = implementation.create_browser()
+    browser = WebKitMethods.create_browser()
 
     box = gtk.VBox(homogeneous=False, spacing=0)
     window.add(box)
@@ -161,9 +106,9 @@ def launch_browser(uri, quit_function=None, echo=True):
     def title_changed(title):
         if title != 'null': message_queue.put(title)
 
-    implementation.connect_title_changed(browser, title_changed)
+    WebKitMethods.connect_title_changed(browser, title_changed)
 
-    implementation.open_uri(browser, uri)
+    WebKitMethods.open_uri(browser, uri)
 
     def web_recv():
         if message_queue.empty():
@@ -175,7 +120,7 @@ def launch_browser(uri, quit_function=None, echo=True):
 
     def web_send(msg):
         if echo: print '<<<', msg
-        asynchronous_gtk_message(implementation.inject_javascript)(browser, msg)
+        asynchronous_gtk_message(WebKitMethods.inject_javascript)(browser, msg)
 
     return browser, web_recv, web_send
 

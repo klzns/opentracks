@@ -9,9 +9,11 @@ from simplejson import loads as from_json
 
 from webgui import start_gtk_thread
 from webgui import launch_browser
+from webgui import load_html
 from webgui import synchronous_gtk_message
 from webgui import asynchronous_gtk_message
 from webgui import kill_gtk_thread
+from webgui import WebKitMethods
 
 class Global(object):
     quit = False
@@ -49,24 +51,23 @@ def main():
 
         if msg == "got-a-click":
             clicks += 1
-            web_send('document.getElementById("messages").innerHTML = %s' %
+            web_send('$("#messages").text(%s)' %
                      to_json('%d clicks so far' % clicks))
-            # If you are using jQuery, you can do this instead:
-            # web_send('$("#messages").text(%s)' %
-            #          to_json('%d clicks so far' % clicks))
 
         if current_time - last_second >= 1.0:
-            web_send('document.getElementById("uptime-value").innerHTML = %s' %
+            web_send('$("#uptime-value").text(%s)' %
                      to_json('%d' % uptime_seconds))
-            # If you are using jQuery, you can do this instead:
-            # web_send('$("#uptime-value").text(%s)'
-            #        % to_json('%d' % uptime_seconds))
             uptime_seconds += 1
             last_second += 1.0
 
         if msg == 'server-count':
             count = otapi.OTAPI_Basic_GetServerCount()
-            web_send('console.log("Servers: %d ")' % count )
+
+            #change_page(browser, 'index2.html')
+            synchronous_gtk_message(load_page)(browser, '<html><body><h1>oi</h1></html>', uri)
+
+
+            web_send('window.queue.pop().resolve(%s)' % to_json('%d' % count) )
 
 
         if again: pass
