@@ -18,17 +18,18 @@
     <script type="text/javascript" src="libs/jquery-1.10.2.min.js"></script>
     <script type="text/javascript" src="libs/jquery.json-2.4.min.js"></script>
     <script type="text/javascript" src="libs/bootstrap.min.js"></script>
+    <script type="text/javascript" src="libs/underscore.min.js"></script>
 
     <script type="text/javascript">
 
       function got_a_click() {
-        send("got-a-click");
+        send({"action": "got-a-click"});
       }
 
       function servidor() {
-        var promise = send("server-count");
+        var promise = send({"action": "server-count"});
         promise.done(function(data){
-          console.log('AEAEAEAEAEAE '+ data);
+          $('body').append('oi');
         })
       }
 
@@ -38,6 +39,9 @@
         send('document.ready');
       })
 
+      setInterval(function(){
+        console.log('console');
+      }, 1000);
     </script>
 
   </head>
