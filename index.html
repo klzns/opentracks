@@ -23,11 +23,11 @@
     <script type="text/javascript">
 
       function got_a_click() {
-        send({"action": "got-a-click"});
+        send({"route": "got-a-click"});
       }
 
       function servidor() {
-        var promise = send({"action": "server-count"});
+        var promise = send({"route": "server-count"});
         promise.done(function(data){
           $('body').append('oi');
         })

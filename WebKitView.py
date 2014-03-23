@@ -1,5 +1,6 @@
 import os, urllib, sys, time, json
-import otapi
+from app.service import *
+from app.otapi import otapi
 
 from jinja2 import Template
 from PySide.QtCore import *
@@ -38,12 +39,14 @@ def receiveData(json_str):
         canSendData = True
         return 
 
-    if canSendData:
+    if canSendData and 'route' in set(data):
         # template = Template('Hello {{ name }}!')
         # web.setHtml(template.render(name='John Doe'))
-
         print 'Received data:', data
-        sendData(data['id'], {'Hello': 'from PySide', 'itsNow': int(time.time())})
+
+        response = route.to(data['route'], data, web)
+
+        sendData(data['id'], response)
 
 def main():
 	global web, canSendData
