@@ -1,6 +1,7 @@
 import os, urllib, sys, time, json
-from jinja2 import Template 
+import otapi
 
+from jinja2 import Template
 from PySide.QtCore import *
 from PySide.QtGui import *
 from PySide.QtWebKit import *
@@ -44,9 +45,11 @@ def receiveData(json_str):
         print 'Received data:', data
         sendData(data['id'], {'Hello': 'from PySide', 'itsNow': int(time.time())})
 
-
 def main():
 	global web, canSendData
+	otapi.OTAPI_Basic_AppStartup()
+	otapi.OTAPI_Basic_Init()
+	otapi.OTAPI_Basic_LoadWallet()
 
 	# Init QT app
 	app = QApplication(sys.argv)
@@ -65,6 +68,9 @@ def main():
 
 	# Bind front-end signals
 	web.titleChanged.connect(receiveData)
+
+	# Bind shut down
+	app.aboutToQuit.connect(lambda: otapi.OTAPI_Basic_AppShutdown())
 
 	# Start up
 	web.show()
