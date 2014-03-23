@@ -65,7 +65,7 @@ def main():
 	canSendData = False
 
 	# Get index.html file
-	file = os.path.abspath('index.html')
+	file = os.path.abspath('templates/index.html')
 	uri = 'file://' + urllib.pathname2url(file)
 	web.load(uri)
 

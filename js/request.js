@@ -9,12 +9,12 @@ function send(msg) {
 	requestId++;
 
     document.title = "null";
-    document.title = $.toJSON(msg);
+    document.title = JSON.stringify(msg);
 
     return promise;
 }
 
 function receive(id, msg) {	
-	requests[id].resolve(msg);
+	requests[id].resolve(JSON.parse(msg));
 	delete requests[id];
 }
