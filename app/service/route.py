@@ -1,7 +1,8 @@
 from app.service import layer
 
 routes = {
-	"server-count": layer.serverCount
+	"server-count": layer.serverCount,
+	"add-server": layer.addServer
 }
 
 def to(request, data, web):

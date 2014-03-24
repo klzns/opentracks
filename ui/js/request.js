@@ -8,8 +8,8 @@ function send(msg) {
 	requests[requestId] = promise;
 	requestId++;
 
-    document.title = "null";
-    document.title = JSON.stringify(msg);
+    
+    alert(JSON.stringify(msg));    
 
     return promise;
 }

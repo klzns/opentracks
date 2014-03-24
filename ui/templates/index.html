@@ -1,0 +1,24 @@
+{% extends "templates/base.html" %}
+{% block head %}
+<script type="text/javascript">
+
+  function servidor() {
+    var promise = send({"route": "server-count"});
+    promise.done(function(data){
+      $('body').append('Result: '+data.count+' servers');
+    })
+  }
+
+  $(document).ready(function() {        
+    $('#servidor').bind('click', servidor);
+    send('document.ready');
+  })
+
+</script>
+{% endblock %}
+{% block content %}
+  
+    <h1>Open Tracks</h1> - {{ a }}
+
+    <button class="btn btn-primary" id="servidor">Servidor</button>
+{% endblock %}
