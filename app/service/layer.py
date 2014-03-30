@@ -1,4 +1,4 @@
-from app.otapi import otapi
+from otapi import otapi
 
 def serverCount(data, web):
 	count = otapi.OTAPI_Basic_GetServerCount()

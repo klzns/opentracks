@@ -2,16 +2,13 @@
 <html lang="en">
   <head>
     <title></title>
-
-    <link href='http://fonts.googleapis.com/css?family=Lato:300,400,700' rel='stylesheet' type='text/css'>
-    <style type="text/css">{% include 'css/fonts.css' %}</style>
-    <style type="text/css">{% include 'css/main.css' %}</style>
-    <style type="text/css">{% include 'css/bootstrap.min.css' %}</style>
-    <script type="text/javascript">{% include 'libs/jquery-1.10.2.min.js' %}</script>
-    <script type="text/javascript">{% include 'libs/jquery.json-2.4.min.js' %}</script>
-    <script type="text/javascript">{% include 'libs/bootstrap.min.js' %}</script>
-    <script type="text/javascript">{% include 'libs/underscore-min.js' %}</script>
-    <script type="text/javascript">{% include 'js/request.js' %}</script>
+    
+    <link href='{{ url_for('static', filename='css/bootstrap.css') }}' rel='stylesheet' type='text/css'>
+    <link href='{{ url_for('static', filename='css/main.css') }}' rel='stylesheet' type='text/css'>
+    <script type="text/javascript" src="{{ url_for('static', filename='libs/jquery-1.10.2.min.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='libs/jquery.json-2.4.min.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='libs/bootstrap.min.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='libs/underscore-min.js') }}"></script>
 
     {% block head %}
     {% endblock %}    
