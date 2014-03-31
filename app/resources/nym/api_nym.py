@@ -8,6 +8,12 @@ def nym_post():
     nym = ot_nym.create()
     
     if nym:
+        if 'name' in request.json:
+            ok = ot_nym.set_name(nym, request.json['name'])
+            if ok:
+                return jsonify({'nym': nym })
+            else:
+                return jsonify({'error': 'Couldn\'t create a nym with name' })
         return jsonify({'nym': nym })
     else:
         return jsonify({'error': 'Couldn\'t create a nym' })

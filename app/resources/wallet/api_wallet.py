@@ -20,3 +20,16 @@ def add_server():
         return jsonify({}), 201
     else:
         return jsonify({"error": "Bad contract"}), 400
+
+@app.route('/wallet/passphrase', methods=['POST'])
+def change_passphrase():
+    if not request.json or not 'passphrase' in request.json:
+        abort(400)
+
+    passphrase = str(request.json['passphrase'])
+    result = ot_wallet.change_passphrase(passphrase)
+
+    if result:
+        return jsonify({}), 200
+    else:
+        return jsonify({"error": "Couldn\'t change passphrase"}), 500
