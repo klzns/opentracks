@@ -1,47 +1,52 @@
 import os
-from service import layer
 from otapi import otapi
 
 # import Flask
 from flask import *
 
+from resources.nym import ot_nym
+from resources.server import ot_server
+
 app = Flask(__name__)
 app.secret_key = os.urandom(24)
 
+BLUEPRINTS = {
+    'resources.nym': 'api_nym',
+    'resources.server': 'api_server',
+    'resources.wallet': 'api_wallet'
+}
+
 @app.route('/')
 def index():
-    count = otapi.OTAPI_Basic_GetServerCount()
-    if count == 0:
-        TEMPLATE_FILE = 'addServer.html'
+    serverCount = ot_server.count()
+    if serverCount == 0:
+        TEMPLATE_FILE = 'add-server.html'
     else:
-        TEMPLATE_FILE = 'index.html'
-        templateData = { "a": 123 }
+        nymCount = ot_nym.count()
+        if nymCount == 0:
+            TEMPLATE_FILE = 'new-nym.html'
+        else:
+            TEMPLATE_FILE = 'index.html'
         
     return render_template(TEMPLATE_FILE, a = 123)
 
-@app.route('/server', methods=['POST'])
-def server():    
-    if not request.json or not 'contract' in request.json:
-        abort(400)
+def __import_variable(blueprint_path, module, variable_name):
+    path = '.'.join(blueprint_path.split('.') + [module])
+    mod = __import__(path, fromlist=[variable_name])
+    return getattr(mod, variable_name)
 
-    contract = str(request.json['contract'])
-    result = None
-    try:            
-        result = otapi.OTAPI_Basic_AddServerContract(str(contract))
-    except Exception as error:
-        print "Error: ", error
-        abort(500)
-
-    if result:
-        return 201
-    else:
-        return jsonify({"error": "Bad contract"}), 400    
+def configure_blueprints(app, blueprints):
+    for k in blueprints:
+        blueprint = __import_variable(k, blueprints[k], 'app')
+        app.register_blueprint(blueprint)
 
 if __name__ == '__main__':
     # Open-Transactions setup
     otapi.OTAPI_Basic_AppStartup()
     otapi.OTAPI_Basic_Init()
     otapi.OTAPI_Basic_LoadWallet()
+
+    configure_blueprints(app, BLUEPRINTS)
 
     app.run(use_debugger=True, debug=True,
             use_reloader=False)

@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block head %}
+<script type="text/javascript">
+  $(document).ready(function(){
+    $('#new-nym').on('submit', function(ev){
+      ev.preventDefault();
+      $.ajax({
+        url: '/nym',
+        method: 'POST',
+        dataType: 'json',
+        contentType: 'application/json',
+        data: JSON.stringify({
+          name: $('#nym-name').val()
+        })
+      }).done(function(data){
+        window.location.replace("/");
+      });
+    });
+  });
+</script>
+{% endblock %}
+{% block content %}
+
+  <div class="main">
+    <div class="row">
+      <div class="col-lg-12">
+        <h1>Setup</h1>
+        <p>Give a name for you pseudonym.</p>
+        <form id="new-nym" action="/nym" method="POST">
+          <div class="form-group">
+            <label class="control-label">Name
+              <input type="text" name="name" id="nym-name"/>
+            </label>            
+          </div>
+          <p class="pull-right"><input type="submit" class="btn btn-primary btn-lg"/></p>
+        </form>
+      </div>
+    </div>
+  </div>
+{% endblock %}
