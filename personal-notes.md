@@ -223,8 +223,6 @@ digite a passphrase (test)
 É isso!
 
 
-
-
 Moneychanger
 [21:52] <+pigeons> assuming your ot libs are in ~/.local/lib add this line adjusted for your username to ~/.profile and then type source ~/.profile
 [21:52] <+pigeons> export LD_LIBRARY_PATH=$HOME/.local/lib:$LD_LIBRARY_PATH

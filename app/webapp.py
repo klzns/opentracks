@@ -4,31 +4,17 @@ from otapi import otapi
 # import Flask
 from flask import *
 
-from resources.nym import ot_nym
-from resources.server import ot_server
-
 app = Flask(__name__)
 app.secret_key = os.urandom(24)
 
 BLUEPRINTS = {
     'resources.nym': 'api_nym',
     'resources.server': 'api_server',
-    'resources.wallet': 'api_wallet'
+    'resources.wallet': 'api_wallet',
+    'resources.asset': 'api_asset',
+    'resources.account': 'api_account',
+    'web': 'api'
 }
-
-@app.route('/')
-def index():
-    serverCount = ot_server.count()
-    if serverCount == 0:
-        TEMPLATE_FILE = 'add-server.html'
-    else:
-        nymCount = ot_nym.count()
-        if nymCount == 0:
-            TEMPLATE_FILE = 'new-nym.html'
-        else:
-            TEMPLATE_FILE = 'index.html'
-        
-    return render_template(TEMPLATE_FILE, a = 123)
 
 def __import_variable(blueprint_path, module, variable_name):
     path = '.'.join(blueprint_path.split('.') + [module])

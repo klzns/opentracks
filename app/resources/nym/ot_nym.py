@@ -12,7 +12,7 @@ def set_name(nym, name):
     return otapi.OTAPI_Basic_SetNym_Name(nym, nym, name)
 
 def get_all():
-    nNymCount = nym_count()
+    nNymCount = count()
     
     nyms = []
     for i in range(nNymCount):
