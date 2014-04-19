@@ -11,11 +11,23 @@ def get_all():
 	accounts = []
 	for i in range(nAccountCount):
 	    strID = otapi.OTAPI_Basic_GetAccountWallet_ID(i)
-	    strStatAcct = objEasy.stat_asset_account(strID)
-	    bSuccess = objEasy.VerifyMessageSuccess(strStatAcct)
-	    if (bSuccess):	    	
-	    	accounts.append(strStatAcct)
-	    else:
-	    	print("Error trying to stat an asset account: "+strID)
+
+	    current = {}
+	    current["name"] = otapi.OTAPI_Basic_GetAccountWallet_Name(strID)
+	    current["balance"] = otapi.OTAPI_Basic_GetAccountWallet_Balance(strID)
+
+	    current["nym"] = {}
+	    current["nym"]["id"] = otapi.OTAPI_Basic_GetAccountWallet_NymID(strID)
+	    current["nym"]["name"] = otapi.OTAPI_Basic_GetNym_Name(current["nym"]["id"])
+
+	    current["server"] = {}
+	    current["server"]["id"] = otapi.OTAPI_Basic_GetAccountWallet_ServerID(strID)
+	    current["server"]["name"] = otapi.OTAPI_Basic_GetServer_Name(current["server"]["id"])
+
+	    current["asset"] = {}
+	    current["asset"]["id"] = otapi.OTAPI_Basic_GetAccountWallet_AssetTypeID(strID)
+	    current["asset"]["name"] = otapi.OTAPI_Basic_GetAssetType_Name(current["asset"]["id"])
+
+	    accounts.append(current)
 	    
-	return accounts	
+	return accounts
