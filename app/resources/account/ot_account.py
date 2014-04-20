@@ -261,3 +261,12 @@ def incoming(account):
                 return current
         else:
             return {}
+
+def refresh(account):
+    account = str(account)
+    MyNym = otapi.OTAPI_Basic_GetAccountWallet_NymID(account)
+    Server = otapi.OTAPI_Basic_GetAccountWallet_ServerID(account)
+
+    objEasy = otapi.OTMadeEasy()
+
+    return objEasy.retrieve_account(Server, MyNym, account, True)

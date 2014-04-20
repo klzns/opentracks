@@ -33,6 +33,15 @@ def account_incoming(id):
 
 	return jsonify({ 'incoming': incoming })
 
+@app.route('/account/<string:id>/refresh', methods=['GET'])
+def account_refresh(id):
+	result = ot_account.refresh(id)
+
+	if result:
+		return 'OK', 200
+	else:
+		return 'Ops', 500
+
 #@app.route('/account/<string:id>', methods=['GET'])
 #def account(id):
 	# TODO

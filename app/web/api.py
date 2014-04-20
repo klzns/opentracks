@@ -29,8 +29,8 @@ def nym_page(nym):
     accounts = ot_account.accounts_for_nym(nym)
     return render_template('nym.html', accounts=accounts)
 
-@app.route('/account/<string:account>', methods=['GET'])
-def account_page(account):
+# @app.route('/account/<string:account>', methods=['GET'])
+# def account_page(account):
 
 
 @app.route('/stat')
