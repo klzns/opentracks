@@ -10,12 +10,17 @@ from PySide.QtCore import *
 
 # import Flask
 from webapp import app as application
+from webapp import configure_blueprints
+from webapp import BLUEPRINTS
 
 class WebApp(QThread):
-    def setApplication(self, obj):
+    def setApplication(self, obj, configure_blueprints, BLUEPRINTS):
         self.application = obj
+        self.configure_blueprints = configure_blueprints
+        self.BLUEPRINTS = BLUEPRINTS
 
     def run(self):
+        self.configure_blueprints(self.application, self.BLUEPRINTS)
         self.application.run()
 
 def main():
@@ -23,7 +28,7 @@ def main():
 
     # Init Flask server
     webappThread = WebApp()
-    webappThread.setApplication(application)
+    webappThread.setApplication(application, configure_blueprints, BLUEPRINTS)
     webappThread.start()
 
     # Open-Transactions setup
