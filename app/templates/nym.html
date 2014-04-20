@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block head %}
+<script type="text/javascript">
+
+</script>
+{% endblock %}
+{% block content %}
+
+	<ol class="breadcrumb">
+		<li><a href="/">Home</a></li>
+		<li class="active">{{accounts[0].nym.name}}</li>
+	</ol>
+
+	<h1>{{accounts[0].nym.name}}</h1>
+	<div class="row">
+	{% for account in accounts %}
+	<div class="col-md-4">
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<a href="/account/{{account.id}}">{{account.name}}</a>
+			</div>
+			<div class="panel-body">
+				<p><b>Asset:</b> {{account.asset.name}}</p>
+				<p><b>Server:</b> {{account.server.name}}</p>
+			</div>
+			<div class="panel-footer clearfix">
+				<div class="pull-right">
+					{{account.balance}}
+				</div>
+			</div>
+		</div>
+	</div>
+	{% endfor %}
+	</div>
+
+{% endblock %}

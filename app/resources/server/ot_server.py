@@ -11,7 +11,8 @@ def get_all():
         strID = otapi.OTAPI_Basic_GetServer_ID(i)
         strName = otapi.OTAPI_Basic_GetServer_Name(strID)
         current = {}
-        current[strID] = strName
+        current["id"] = strID
+        current["name"] = strName
         servers.append(current)
 
     return servers

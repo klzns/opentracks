@@ -3,6 +3,7 @@ from resources.server import ot_server
 from resources.wallet import ot_wallet
 from resources.asset import ot_asset
 from resources.account import ot_account
+from . import ot
 
 from flask import *
 
@@ -19,20 +20,19 @@ def index():
             TEMPLATE_FILE = 'new-nym.html'
         else:
             TEMPLATE_FILE = 'index.html'
+            return render_template(TEMPLATE_FILE, stat=ot.stat())
         
-    return render_template(TEMPLATE_FILE, a = 123)
+    return render_template(TEMPLATE_FILE)
+
+@app.route('/nym/<string:nym>/', methods=['GET'])
+def nym_page(nym):
+    accounts = ot_account.accounts_for_nym(nym)
+    return render_template('nym.html', accounts=accounts)
+
+@app.route('/account/<string:account>', methods=['GET'])
+def account_page(account):
+
 
 @app.route('/stat')
 def stat():
-    nyms = ot_nym.get_all()
-    servers = ot_server.get_all()
-    assets = ot_asset.get_all()
-    accounts = ot_account.get_all()
-
-    response = {
-        "nyms": nyms,
-        "servers": servers,
-        "assets": assets,
-        "accounts": accounts
-    }
-    return jsonify(response)
+    return jsonify(ot.stat())

@@ -19,7 +19,7 @@ def nym_post():
         return jsonify({'error': 'Couldn\'t create a nym' })
     
 @app.route('/nym/<string:nym>/name/<string:name>', methods=['POST'])
-def nym_name_post(nym, name):    
+def nym_name_post(nym, name):
     ok = ot_nym.set_name(nym, name)
     if ok:
         return jsonify({'nym': nym })
@@ -45,3 +45,4 @@ def nym_get_all():
     nyms = ot_nym.get_all()
 
     return jsonify({ 'nyms': nyms })
+

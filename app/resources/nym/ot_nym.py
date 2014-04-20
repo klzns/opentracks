@@ -19,7 +19,8 @@ def get_all():
         strID = otapi.OTAPI_Basic_GetNym_ID(i)
         strName = otapi.OTAPI_Basic_GetNym_Name(strID)
         current = {}
-        current[strID] = strName
+        current["id"] = strID
+        current["name"] = strName
         nyms.append(current)
         
     return nyms

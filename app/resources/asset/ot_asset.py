@@ -11,7 +11,8 @@ def get_all():
         strID = otapi.OTAPI_Basic_GetAssetType_ID(i)
         strName = otapi.OTAPI_Basic_GetAssetType_Name(strID)
         current = {}
-        current[strID] = strName
+        current["id"] = strID
+        current["name"] = strName
         assets.append(current)
         
     return assets
