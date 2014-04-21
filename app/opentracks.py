@@ -41,7 +41,7 @@ def main():
 
     # Setup WebView (WebKit)
     web = QWebView()
-    web.resize(900, 800)
+    web.resize(992, 800)
     web.setWindowTitle('Open Tracks')
     web.setWindowIcon(QIcon('ui/img/icon.png'))
     qr = web.frameGeometry()
