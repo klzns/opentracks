@@ -1,5 +1,4 @@
 
-
 01 - Criou uma wallet
 02 - Adicionou um servidor a wallet
 	Copiou o contrato do servidor em sample_data/localhost.xml
@@ -226,3 +225,37 @@ digite a passphrase (test)
 Moneychanger
 [21:52] <+pigeons> assuming your ot libs are in ~/.local/lib add this line adjusted for your username to ~/.profile and then type source ~/.profile
 [21:52] <+pigeons> export LD_LIBRARY_PATH=$HOME/.local/lib:$LD_LIBRARY_PATH
+
+
+
+
+###################################### How To
+Setup a fresh OT Server:
+## Create Nym:
+opentxs newnym
+## Create credentials folder and copy from client_data to server_data:
+mkdir ~/.ot/server_data/credentials && cp -R ~/.ot/client_data/credentials/* ~/.ot/server_data/credentials
+## Modify Server Contract .xml file (get a basis file from sample-data/sample-contracts/localhost.xml)
+## Sign Server Contract:
+opentxs newserver --mynym Cq1ALIuPTPuQJLwCRqab4njQJaijJogfXaH463CDwqm
+(the nym you got from "opentxs newnym")
+## Decode Cached Key from wallet.xml:
+opentxs decode
+## Setup the server, enter the generated data from previous steps:
+otserver
+## Delete client_data
+
+### opentxs:
+newasset (or addasset for already signed, existing assets)
+issueasset (issue the asset on the server)
+
+# create mint (on server, for anonym digital cash):
+createmint  server_id  server_user_id(Nym_ID)  asset_type_id  
+e.g.:
+createmint KujoAS9CzZgtKoqv68vD6H10itVIKuFwxlh5qfLOGAi Cq1ALIuPTPuQJLwCRqab4njQJaijJogfXaH463CDwqm Vu8hw5hhtttbvemN4fdsO1BAhjR1NdlORsH06hMaz87
+
+# Download Mint Pubkeys (on client):
+showmint        show a mint file for specific asset ID. Download if necessary.
+e.g.:
+opentxs showmint  --server KujoAS9CzZgtKoqv68vD6H10itVIKuFwxlh5qfLOGAi --mynym HRgfdsHFf9QkYrNF0Zz95APjFhmcHoSY2coX7yiKkQV --mypurse Vu8hw5hhtttbvemN4fdsO1BAhjR1NdlORsH06hMaz87
+(mypurse = asset type ID)
