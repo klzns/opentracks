@@ -16,3 +16,17 @@ def get_all():
         servers.append(current)
 
     return servers
+
+def register(server, nym):
+    objEasy = otapi.OTMadeEasy()
+
+    strResponse = objEasy.register_nym(server, nym) # This also does getRequest internally, if success.
+    nSuccess = int(strResponse)
+
+    if nSuccess is 1:
+        return { 'register': true }
+    else:
+        if strResponse:
+            return { 'error': 'Error in register_nym! '+strResponse }
+        else:
+            return { 'error': 'Error in register_nym!' }
