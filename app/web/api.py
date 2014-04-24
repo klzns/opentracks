@@ -1,8 +1,8 @@
-from resources.nym import ot_nym
-from resources.server import ot_server
-from resources.wallet import ot_wallet
-from resources.asset import ot_asset
-from resources.account import ot_account
+from resources.nym import ot_nym, api_nym
+from resources.server import ot_server, api_server
+from resources.wallet import ot_wallet, api_wallet
+from resources.asset import ot_asset, api_asset
+from resources.account import ot_account, api_account
 from . import ot
 
 from flask import *
@@ -28,6 +28,7 @@ def index():
 def nym_page(nym):
     accounts = ot_account.accounts_for_nym(nym)
     return render_template('nym.html', accounts=accounts)
+
 
 # @app.route('/account/<string:account>', methods=['GET'])
 # def account_page(account):

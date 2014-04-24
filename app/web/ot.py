@@ -4,7 +4,6 @@ from resources.wallet import ot_wallet
 from resources.asset import ot_asset
 from resources.account import ot_account
 
-
 def stat():
     nyms = ot_nym.get_all()
     servers = ot_server.get_all()

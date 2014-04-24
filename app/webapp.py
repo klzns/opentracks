@@ -4,15 +4,17 @@ from otapi import otapi
 # import Flask
 from flask import *
 
+from web import api
+
 app = Flask(__name__)
 app.secret_key = os.urandom(24)
 
 BLUEPRINTS = {
+    'resources.account': 'api_account',
+    'resources.asset': 'api_asset',
     'resources.nym': 'api_nym',
     'resources.server': 'api_server',
     'resources.wallet': 'api_wallet',
-    'resources.asset': 'api_asset',
-    'resources.account': 'api_account',
     'web': 'api'
 }
 
