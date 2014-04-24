@@ -36,6 +36,8 @@ nosetests.xml
 .pydevproject
 
 *.pyc
+!otapi.pyc
+
 venv
 *~
 .DS_Store
