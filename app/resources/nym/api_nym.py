@@ -1,9 +1,9 @@
 from . import ot_nym
-from flask import *
+from flask import Blueprint, jsonify, request
 
-app = Blueprint('nym', __name__, template_folder='templates')
+mod_nym = Blueprint('nym', __name__, template_folder='templates')
 
-@app.route('/nym', methods=['POST'])
+@mod_nym.route('/nym', methods=['POST'])
 def nym_post():
     nym = ot_nym.create()
     
@@ -18,7 +18,7 @@ def nym_post():
     else:
         return jsonify({'error': 'Couldn\'t create a nym' })
     
-@app.route('/nym/<string:nym>/name/<string:name>', methods=['POST'])
+@mod_nym.route('/nym/<string:nym>/name/<string:name>', methods=['POST'])
 def nym_name_post(nym, name):
     ok = ot_nym.set_name(nym, name)
     if ok:
@@ -26,13 +26,13 @@ def nym_name_post(nym, name):
     else:
         return jsonify({'nym': nym, 'error': 'Couldn\'t set a name' })
 
-@app.route('/nym/count')
+@mod_nym.route('/nym/count')
 def nym_count():
     count = ot_nym.count()
 
     return jsonify({'count': count})
 
-@app.route('/nym/<string:nym>/name/<string:name>', methods=['PUT'])
+@mod_nym.route('/nym/<string:nym>/name/<string:name>', methods=['PUT'])
 def nym_set_name(nym, name):
     ok = ot_nym.set_name(nym, nym, name)
     if ok:
@@ -40,7 +40,7 @@ def nym_set_name(nym, name):
     else:
         return jsonify({'error': 'Couldn\'t change name'})
 
-@app.route('/nyms', methods=['GET'])
+@mod_nym.route('/nyms', methods=['GET'])
 def nym_get_all():
     nyms = ot_nym.get_all()
 

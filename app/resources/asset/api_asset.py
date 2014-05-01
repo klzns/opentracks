@@ -1,4 +1,4 @@
 from . import ot_asset
-from flask import *
+from flask import Blueprint
 
-app = Blueprint('asset', __name__, template_folder='templates')
+mod_asset = Blueprint('asset', __name__, template_folder='templates')

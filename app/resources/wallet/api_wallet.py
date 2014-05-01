@@ -1,9 +1,9 @@
 from . import ot_wallet
-from flask import *
+from flask import Blueprint, jsonify, request
 
-app = Blueprint('wallet', __name__, template_folder='templates')
+mod_wallet = Blueprint('wallet', __name__, template_folder='templates')
 
-@app.route('/wallet/server', methods=['POST'])
+@mod_wallet.route('/wallet/server', methods=['POST'])
 def add_server():
     if not request.json or not 'contract' in request.json:
         abort(400)
@@ -21,7 +21,7 @@ def add_server():
     else:
         return jsonify({"error": "Bad contract"}), 400
 
-@app.route('/wallet/passphrase', methods=['POST'])
+@mod_wallet.route('/wallet/passphrase', methods=['POST'])
 def change_passphrase():
     if not request.json or not 'passphrase' in request.json:
         abort(400)
