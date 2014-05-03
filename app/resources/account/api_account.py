@@ -25,7 +25,11 @@ def account_inbox(id):
 def account_outgoing(id):
 	outgoing = ot_account.outgoing(id)
 
-	return jsonify({ 'outgoing':outgoing })
+	if 'error' in outgoing:
+		return jsonify(outgoing), 400
+	else:
+		return jsonify(outgoing), 200
+
 
 @mod_account.route('/account/<string:id>/incoming', methods=['GET'])
 def account_incoming(id):

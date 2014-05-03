@@ -1,11 +1,5 @@
-from flask import Blueprint, render_template, jsonify
-
-from resources.nym import ot_nym, api_nym
-from resources.server import ot_server, api_server
-from resources.wallet import ot_wallet, api_wallet
-from resources.asset import ot_asset, api_asset
-from resources.account import ot_account, api_account
-from . import ot
+from flask import Blueprint, render_template, jsonify, request
+from import_resources import *
 from database import db
 
 mod_web = Blueprint('web', __name__)
@@ -30,12 +24,27 @@ def index():
 @mod_web.route('/nym/<string:nym>/', methods=['GET'])
 def nym_page(nym):
     accounts = ot_account.accounts_for_nym(nym)
-    return render_template('nym.html', accounts=accounts)
+    return render_template('nym/nym.html', accounts=accounts)
 
+@mod_web.route('/transaction/transfer', methods=['POST'])
+def transaction():
+    if  'myAccId' in request.json and \
+        'hisAccId' in request.json and \
+        'amount' in request.json:
+        data = request.get_json()
 
-# @mod_web.route('/account/<string:account>', methods=['GET'])
-# def account_page(account):
+        if 'note' in data:
+            note = data['note']
+        else:
+            note = ''
 
+        result = ot.send_transfer(data['myAccId'], data['hisAccId'], data['amount'], note)
+        if 'error' in result:
+            return jsonify(result), 400
+        else:
+            return jsonify(result), 200
+    else:
+        return jsonify({ 'error': 'Did not found all the required parameters (myAccId, hisAccId and amount).' }), 400
 
 @mod_web.route('/stat')
 def stat():
