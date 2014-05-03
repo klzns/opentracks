@@ -4,3 +4,13 @@
 h1 {
 	font-weight: light;
 }
+
+.account-info .dl-horizontal dt{
+	width: 50px;
+}
+
+.account-info .dl-horizontal dd{
+	margin-left: 60px;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}

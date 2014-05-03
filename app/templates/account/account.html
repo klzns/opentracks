@@ -1,0 +1,169 @@
+{% extends "base.html" %}
+{% block head %}
+<script type="text/javascript">
+
+</script>
+{% endblock %}
+{% block content %}
+
+<ol class="breadcrumb">
+	<li><a href="/">Home</a></li>
+	<li><a href="/nym/{{account.nym.id}}">{{account.nym.name}}</a></li>
+	<li class="active">{{account.name}}</li>
+</ol>
+
+<h1 class="clearfix">
+	{{account.name}} 
+	<span class="label label-success pull-right">
+		{{account.formattedBalance}} 
+		<sup>({{account.balance}})</sup>
+	</span>
+</h1>
+<div class="row account-info">	
+	<dl class="asset-info col-md-4 dl-horizontal">
+		<dt></dt>
+		<dd><h5>Asset</h5></dd>
+		<div class="text-muted">
+			<dt>Id</dt>
+			<dd>{{account.asset.id}}</dd>
+			<dt>Name</dt>
+			<dd>{{account.asset.name}}</dd>
+		</div>
+	</dl>	
+	<dl class="nym-info col-md-4 dl-horizontal">
+		<dt></dt>
+		<dd><h5>Nym</h5></dd>
+		<div class="text-muted">
+			<dt>Id</dt>
+			<dd>{{account.nym.id}}</dd>
+			<dt>Name</dt>
+			<dd>{{account.nym.name}}</dd>
+		</div>
+	</dl>	
+	<dl class="server-info col-md-4 dl-horizontal">
+		<dt></dt>
+		<dd><h5>Server</h5></dd>
+		<div class="text-muted">
+			<dt>Id</dt>
+			<dd>{{account.server.id}}</dd>
+			<dt>Name</dt>
+			<dd>{{account.server.name}}</dd>
+		</div>
+	</dl>
+</div>
+
+<div class="row">	
+	<div class="col-md-6">
+		<div class="panel panel-primary">
+			<div class="panel-heading">
+				<h3 class="panel-title"><span class="glyphicon glyphicon-arrow-down"></span> Inbox</h3>
+			</div>
+			{% if inbox.inbox|length < 1 %}
+			<div class="panel-body">
+				Empty inbox.
+			</div>
+			{% else %}
+			<div class="table-responsive">
+				<table class="table table-box">
+					<thead>
+						<tr>
+							<th class="index">Index</th>
+							<th class="from-to">From</th>
+							<th class="transaction-id">Transaction Id</th>
+							<th class="ref">Ref</th>
+							<th class="amount">Amount</th>
+							<th class="status">Status</th>
+							<th class="action">Action</th>
+						</tr>
+					</thead>
+					<tbody>
+						{% for payment in inbox.inbox %}
+						<tr>
+							<td>
+								<span class="badge">{{payment.index}}</span>
+							</td>
+							<td>{{payment.from.accountId}} ({{payment.from.id}})</td>
+							<td>{{payment.transactionId}}</td>
+							<td>{{payment.ref}}</td>
+							<td>{{payment.formattedAmount}} ({{payment.amount}})</td>
+							<td>{{payment.status}}</td>
+							<td>
+								<div class="btn-group">
+								<button type="button" class="btn btn-xs btn-default dropdown-toggle" data-toggle="dropdown">
+										Action <span class="glyphicon glyphicon-transfer"></span>
+										<span class="caret"></span>
+									</button>
+									<ul class="dropdown-menu">
+										<li><a href="#">Dropdown link</a></li>
+										<li class="divider"></li>
+										<li><a href="#">Dropdown link</a></li>
+									</ul>
+								</div>
+							</td>
+						</tr>
+						{% endfor %}
+					</tbody>
+				</table>
+			</div>
+			{% endif %}
+		</div>
+	</div>
+
+	<div class="col-md-6">
+		<div class="panel panel-primary">
+			<div class="panel-heading">
+				<h3 class="panel-title"><span class="glyphicon glyphicon-arrow-up"></span> Outbox</h3>
+			</div>
+			{% if outbox.outbox|length < 1 %}
+			<div class="panel-body">
+				Empty outbox.
+			</div>
+			{% else %}
+			<div class="table-responsive">
+				<table class="table">
+					<thead>
+						<tr>
+							<th>Index</th>
+							<th>To</th>
+							<th>Transaction Id</th>
+							<th>Ref</th>
+							<th>Amount</th>
+							<th>Status</th>
+							<th>Action</th>
+						</tr>
+					</thead>
+					<tbody>
+						{% for payment in outbox.outbox %}
+						<tr>
+							<td>
+								<span class="badge">{{payment.index}}</span>
+							</td>
+							<td>{{payment.to.accountId}} ({{payment.to.id}})</td>
+							<td>{{payment.transactionId}}</td>
+							<td>{{payment.ref}}</td>
+							<td>{{payment.formattedAmount}} ({{payment.amount}})</td>
+							<td>{{payment.status}}</td>
+							<td>
+								<div class="btn-group">
+								<button type="button" class="btn btn-xs btn-default dropdown-toggle" data-toggle="dropdown">
+										Action <span class="glyphicon glyphicon-transfer"></span>
+										<span class="caret"></span>
+									</button>
+									<ul class="dropdown-menu">
+										<li><a href="#">Dropdown link</a></li>
+										<li class="divider"></li>
+										<li><a href="#">Dropdown link</a></li>
+									</ul>
+								</div>
+							</td>
+						</tr>
+						{% endfor %}
+					</tbody>
+				</table>
+			</div>
+			{% endif %}
+		</div>
+
+	</div>
+
+	{% endblock %}
