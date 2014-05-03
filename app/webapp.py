@@ -12,7 +12,7 @@ app.config.from_object('config')
 db.init_app(app)
 
 # Take care of blueprints
-BLUEPRINTS = ['account', 'asset', 'nym', 'server', 'wallet']
+BLUEPRINTS = ['account', 'asset', 'nym', 'server', 'wallet', 'transaction']
 
 def __import_variable(module):
     path = 'resources.'+module+'.api_'+module

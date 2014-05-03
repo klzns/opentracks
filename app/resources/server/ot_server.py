@@ -1,30 +1,43 @@
 from otapi import otapi
 
 def count():
-    return otapi.OTAPI_Basic_GetServerCount()
+    result = otapi.OTAPI_Basic_GetServerCount()
+
+    if result < 1:
+        return { 'error': 'Sorry, there aren\'t any server contracts in this wallet.' }
+    return { 'count': result }
+
+def get_server_info(serverId):    
+    serverId = str(serverId)
+
+    server = {}
+    server["id"] = serverId
+    server["name"] = otapi.OTAPI_Basic_GetServer_Name(serverId)
+
+    return { 'server': server }
 
 def get_all():
-    nServerCount = count()
+    nServerCount = otapi.OTAPI_Basic_GetServerCount()
 
     servers = []
     for i in range(nServerCount):
         strID = otapi.OTAPI_Basic_GetServer_ID(i)
-        strName = otapi.OTAPI_Basic_GetServer_Name(strID)
-        current = {}
-        current["id"] = strID
-        current["name"] = strName
-        servers.append(current)
+        server = get_server_info(strID)['server']
+        servers.append(server)
 
-    return servers
+    return { 'servers': servers }
 
-def register(server, nym):
+def register(serverId, myNymId):
+    serverId = str(serverId)
+    myNymId = str(myNymId)
+
     objEasy = otapi.OTMadeEasy()
 
-    strResponse = objEasy.register_nym(server, nym) # This also does getRequest internally, if success.
+    strResponse = objEasy.register_nym(serverId, myNymId)
     nSuccess = int(strResponse)
 
     if nSuccess is 1:
-        return { 'register': true }
+        return { 'register': True }
     else:
         if strResponse:
             return { 'error': 'Error in register_nym! '+strResponse }

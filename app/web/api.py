@@ -8,11 +8,15 @@ mod_web = Blueprint('web', __name__)
 def index():    
     # Check if user has a server registered
     serverCount = ot_server.count()
+    serverCount = serverCount['count'] if 'count' in serverCount else 0
+
     if serverCount == 0:
         TEMPLATE_FILE = 'server/new.html'
     else:
         # Check if user has a nym
         nymCount = ot_nym.count()
+        nymCount = nymCount['count'] if 'count' in nymCount else 0
+
         if nymCount == 0:
             TEMPLATE_FILE = 'nym/new.html'
         else:
@@ -23,28 +27,8 @@ def index():
 
 @mod_web.route('/nym/<string:nym>/', methods=['GET'])
 def nym_page(nym):
-    accounts = ot_account.accounts_for_nym(nym)
+    accounts = ot_account.accounts_for_nym(nym)['accounts']
     return render_template('nym/nym.html', accounts=accounts)
-
-@mod_web.route('/transaction/transfer', methods=['POST'])
-def transaction():
-    if  'myAccId' in request.json and \
-        'hisAccId' in request.json and \
-        'amount' in request.json:
-        data = request.get_json()
-
-        if 'note' in data:
-            note = data['note']
-        else:
-            note = ''
-
-        result = ot.send_transfer(data['myAccId'], data['hisAccId'], data['amount'], note)
-        if 'error' in result:
-            return jsonify(result), 400
-        else:
-            return jsonify(result), 200
-    else:
-        return jsonify({ 'error': 'Did not found all the required parameters (myAccId, hisAccId and amount).' }), 400
 
 @mod_web.route('/stat')
 def stat():

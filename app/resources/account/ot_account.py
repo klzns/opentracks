@@ -3,30 +3,25 @@ from otapi import otapi
 def count():
 	return otapi.OTAPI_Basic_GetAccountCount()
 
-def get_all():
-	nAccountCount = count()    
+def get_account_info(accoutId):
+	accoutId = str(accoutId)
 
-	accounts = []
-	for i in range(nAccountCount):
-		strID = otapi.OTAPI_Basic_GetAccountWallet_ID(i)
+	account = {}
+	account = balance(accoutId)
 
-		current = balance(strID)
+	account["nym"] = {}
+	account["nym"]["id"] = otapi.OTAPI_Basic_GetAccountWallet_NymID(accoutId)
+	account["nym"]["name"] = otapi.OTAPI_Basic_GetNym_Name(account["nym"]["id"])
 
-		current["nym"] = {}
-		current["nym"]["id"] = otapi.OTAPI_Basic_GetAccountWallet_NymID(strID)
-		current["nym"]["name"] = otapi.OTAPI_Basic_GetNym_Name(current["nym"]["id"])
+	account["server"] = {}
+	account["server"]["id"] = otapi.OTAPI_Basic_GetAccountWallet_ServerID(accoutId)
+	account["server"]["name"] = otapi.OTAPI_Basic_GetServer_Name(account["server"]["id"])
 
-		current["server"] = {}
-		current["server"]["id"] = otapi.OTAPI_Basic_GetAccountWallet_ServerID(strID)
-		current["server"]["name"] = otapi.OTAPI_Basic_GetServer_Name(current["server"]["id"])
+	account["asset"] = {}
+	account["asset"]["id"] = otapi.OTAPI_Basic_GetAccountWallet_AssetTypeID(accoutId)
+	account["asset"]["name"] = otapi.OTAPI_Basic_GetAssetType_Name(account["asset"]["id"])
 
-		current["asset"] = {}
-		current["asset"]["id"] = otapi.OTAPI_Basic_GetAccountWallet_AssetTypeID(strID)
-		current["asset"]["name"] = otapi.OTAPI_Basic_GetAssetType_Name(current["asset"]["id"])
-
-		accounts.append(current)
-
-	return accounts
+	return { 'account': account };
 
 def balance(accountId):
 	accountId = str(accountId)
@@ -41,15 +36,26 @@ def balance(accountId):
 
 	return balance
 
+def get_all():
+	nAccountCount = count()
+
+	accounts = []
+	for i in range(nAccountCount):
+		strID = otapi.OTAPI_Basic_GetAccountWallet_ID(i)
+		account = get_account_info(strID)['account']
+		accounts.append(account)
+
+	return { 'accounts': accounts }
+
 def accounts_for_nym(nym):
-	all_accounts = get_all()
+	all_accounts = get_all()['accounts']
 
 	accounts = []
 	for acc in all_accounts:
 		if acc["nym"]["id"] == nym:
 			accounts.append(acc)
 
-	return accounts
+	return { 'accounts': accounts }
 
 def outbox(myAccId):
 	myAccId = str(myAccId)
@@ -82,14 +88,14 @@ def outbox(myAccId):
 			strSenderAcctID = otapi.OTAPI_Basic_Transaction_GetSenderAcctID(serverId, myNymId, myAccId, trans)
 			strRecipientUserID = otapi.OTAPI_Basic_Transaction_GetRecipientUserID(serverId, myNymId, myAccId, trans)
 			strRecipientAcctID = otapi.OTAPI_Basic_Transaction_GetRecipientAcctID(serverId, myNymId, myAccId, trans)
-			
+
 			strUserID = strRecipientUserID
 			strAcctID = strRecipientAcctID
 
-			bAcctIDExists = True if strAcctID else False            
-			
+			bAcctIDExists = True if strAcctID else False
+
 			strAssetTypeID = otapi.OTAPI_Basic_GetAccountWallet_AssetTypeID(strAcctID) if bAcctIDExists else ''
-			
+
 			if lAmount:
 				if strAssetTypeID:
 					strAmount = otapi.OTAPI_Basic_FormatAmount(strAssetTypeID, lAmount)
@@ -120,12 +126,12 @@ def inbox(myAccId):
 	myAccId = str(myAccId)
 
 	myNymId = otapi.OTAPI_Basic_GetAccountWallet_NymID(myAccId)
-	 
+
 	if not myNymId:
 		return { 'error': 'Unable to find NymID based on myAccId\nThe designated asset account must be yours. OT will find the Nym based on the account.' }
 
 	serverId = otapi.OTAPI_Basic_GetAccountWallet_ServerID(myAccId)
-	
+
 	if not serverId:
 		return { 'error': 'Unable to find Server ID based on myAccId.\nThe designated asset account must be yours. OT will find the Server based on the account.' }
 
@@ -135,7 +141,7 @@ def inbox(myAccId):
 		return { 'error': 'Unable to load asset account inbox. ( '+myAccId+' )\n Perhaps it doesn\'t exist yet?' }
 
 	nCount = otapi.OTAPI_Basic_Ledger_GetCount(serverId, myNymId, myAccId, inbox)
-	 
+
 	if nCount and nCount > 0:
 		payments = []
 		for i in range(nCount):
@@ -148,13 +154,13 @@ def inbox(myAccId):
 			strSenderAcctID = otapi.OTAPI_Basic_Transaction_GetSenderAcctID(serverId, myNymId, myAccId, trans)
 			strRecipientUserID = otapi.OTAPI_Basic_Transaction_GetRecipientUserID(serverId, myNymId, myAccId, trans)
 			strRecipientAcctID = otapi.OTAPI_Basic_Transaction_GetRecipientAcctID(serverId, myNymId, myAccId, trans)
-			
+
 			strUserID = strSenderUserID if strSenderUserID else strRecipientUserID
 			strAcctID = strSenderAcctID if strSenderAcctID else strRecipientAcctID
-			
+
 			bUserIDExists = True if strUserID else False
-			bAcctIDExists = True if strAcctID else False                       
-			
+			bAcctIDExists = True if strAcctID else False
+
 			if bAcctIDExists:
 				strAssetTypeID = otapi.OTAPI_Basic_GetAccountWallet_AssetTypeID(strAcctID)
 			else:
@@ -166,8 +172,8 @@ def inbox(myAccId):
 				else:
 					strAmount = lAmount
 			else:
-				strAmount = "UNKNOWN_AMOUNT"            
-			
+				strAmount = "UNKNOWN_AMOUNT"
+
 			payment = {}
 			payment['index'] = i
 			payment['formattedAmount'] = strAmount
@@ -177,9 +183,9 @@ def inbox(myAccId):
 			payment['ref'] = lRefNum
 
 			payment['from'] = {}
-			payment['from']['id'] = strUserID			
-			payment['from']['accountId'] = strAcctID			
-		
+			payment['from']['id'] = strUserID
+			payment['from']['accountId'] = strAcctID
+
 			payments.append(payment)
 
 		return { 'inbox': payments }
@@ -193,4 +199,9 @@ def refresh(myAccId):
 
 	objEasy = otapi.OTMadeEasy()
 
-	return objEasy.retrieve_account(serverId, myNymId, myAccId, True)
+	result = objEasy.retrieve_account(serverId, myNymId, myAccId, True)
+
+	if not result:
+		return { 'error': 'Failed trying to refresh wallet.' }
+	return { 'refresh': True }
+

@@ -1,18 +1,28 @@
 from otapi import otapi
 
 def count():
-    return otapi.OTAPI_Basic_GetAssetTypeCount()
+    result = otapi.OTAPI_Basic_GetAssetTypeCount()
+
+    if result < 1:
+        return { 'error': 'There aren\'t any asset in this wallet.' }
+    return { 'count': result }
+
+def get_asset_info(assetId):
+    assetId = str(assetId)
+
+    asset = {}
+    asset["id"] = assetId
+    asset["name"] = otapi.OTAPI_Basic_GetAssetType_Name(assetId)
+
+    return { 'asset': asset }
 
 def get_all():
-    nAssetTypeCount = count()
+    nAssetTypeCount = otapi.OTAPI_Basic_GetAssetTypeCount()
     
     assets = []
     for i in range(nAssetTypeCount):
         strID = otapi.OTAPI_Basic_GetAssetType_ID(i)
-        strName = otapi.OTAPI_Basic_GetAssetType_Name(strID)
-        current = {}
-        current["id"] = strID
-        current["name"] = strName
-        assets.append(current)
+        asset = get_asset_info(strID)['asset']
+        assets.append(asset)
         
-    return assets
+    return { 'assets': assets }

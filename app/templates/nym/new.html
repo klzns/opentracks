@@ -5,7 +5,7 @@
     $('#new-nym').on('submit', function(ev){
       ev.preventDefault();
       $.ajax({
-        url: '/nym',
+        url: '/nyms',
         method: 'POST',
         dataType: 'json',
         contentType: 'application/json',
