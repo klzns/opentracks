@@ -46,3 +46,20 @@ def nym_get_all():
 
     return jsonify({ 'nyms': nyms })
 
+@mod_nym.route('/nym/<string:id>/outgoing', methods=['GET'])
+def nym_outgoing(id):
+    outgoing = ot_nym.outgoing(id)
+
+    if 'error' in outgoing:
+        return jsonify(outgoing), 400
+    else:
+        return jsonify(outgoing), 200
+
+@mod_nym.route('/nym/<string:id>/incoming/<string:serverId>', methods=['GET'])
+def nym_incoming(id, serverId):
+    incoming = ot_nym.incoming(id, serverId)
+
+    if 'error' in incoming:
+        return jsonify(incoming), 400
+    else:
+        return jsonify(incoming), 200

@@ -21,21 +21,11 @@ def account_inbox(id):
 
 	return jsonify(inbox)
 
-@mod_account.route('/account/<string:id>/outgoing', methods=['GET'])
-def account_outgoing(id):
-	outgoing = ot_account.outgoing(id)
+@mod_account.route('/account/<string:id>/outbox', methods=['GET'])
+def account_outbox(id):
+	outbox = ot_account.outbox(id)
 
-	if 'error' in outgoing:
-		return jsonify(outgoing), 400
-	else:
-		return jsonify(outgoing), 200
-
-
-@mod_account.route('/account/<string:id>/incoming', methods=['GET'])
-def account_incoming(id):
-	incoming = ot_account.incoming(id)
-
-	return jsonify({ 'incoming': incoming })
+	return jsonify(outbox)
 
 @mod_account.route('/account/<string:id>/refresh', methods=['GET'])
 def account_refresh(id):
