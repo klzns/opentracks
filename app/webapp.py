@@ -23,7 +23,7 @@ def __import_variable(module):
 def configure_blueprints(app, blueprints):
     for k in blueprints:
         blueprint = __import_variable(k)
-        app.register_blueprint(blueprint)
+        app.register_blueprint(blueprint, url_prefix='/api')
 
 configure_blueprints(app, BLUEPRINTS)
 
