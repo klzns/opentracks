@@ -3,38 +3,31 @@ from otapi import otapi
 def count():
 	return otapi.OTAPI_Basic_GetAccountCount()
 
-def get_account_info(accoutId):
-	accoutId = str(accoutId)
+def get_account_info(myAccId):
+	myAccId = str(myAccId)
 
 	account = {}
-	account = balance(accoutId)
+
+	account['id'] = myAccId
+	account['name'] = otapi.OTAPI_Basic_GetAccountWallet_Name(myAccId)
+
+	assetId = otapi.OTAPI_Basic_GetAccountWallet_AssetTypeID(myAccId)
+	account["balance"] = otapi.OTAPI_Basic_GetAccountWallet_Balance(myAccId)
+	account["formattedBalance"] = otapi.OTAPI_Basic_FormatAmount(assetId, account["balance"])
 
 	account["nym"] = {}
-	account["nym"]["id"] = otapi.OTAPI_Basic_GetAccountWallet_NymID(accoutId)
+	account["nym"]["id"] = otapi.OTAPI_Basic_GetAccountWallet_NymID(myAccId)
 	account["nym"]["name"] = otapi.OTAPI_Basic_GetNym_Name(account["nym"]["id"])
 
 	account["server"] = {}
-	account["server"]["id"] = otapi.OTAPI_Basic_GetAccountWallet_ServerID(accoutId)
+	account["server"]["id"] = otapi.OTAPI_Basic_GetAccountWallet_ServerID(myAccId)
 	account["server"]["name"] = otapi.OTAPI_Basic_GetServer_Name(account["server"]["id"])
 
 	account["asset"] = {}
-	account["asset"]["id"] = otapi.OTAPI_Basic_GetAccountWallet_AssetTypeID(accoutId)
-	account["asset"]["name"] = otapi.OTAPI_Basic_GetAssetType_Name(account["asset"]["id"])
+	account["asset"]["id"] = assetId
+	account["asset"]["name"] = otapi.OTAPI_Basic_GetAssetType_Name(assetId)
 
 	return { 'account': account };
-
-def balance(accountId):
-	accountId = str(accountId)
-	balance = {}
-
-	balance["id"] = accountId
-	balance["name"] = otapi.OTAPI_Basic_GetAccountWallet_Name(accountId)
-
-	assetId = otapi.OTAPI_Basic_GetAccountWallet_AssetTypeID(accountId)
-	amount = otapi.OTAPI_Basic_GetAccountWallet_Balance(accountId)
-	balance["balance"] = otapi.OTAPI_Basic_FormatAmount(assetId, amount)
-
-	return balance
 
 def get_all():
 	nAccountCount = count()
@@ -178,7 +171,7 @@ def inbox(myAccId):
 			payment['index'] = i
 			payment['formattedAmount'] = strAmount
 			payment['amount'] = lAmount
-			payment['type'] = strType
+			payment['status'] = strType
 			payment['transactionId'] = lTransID
 			payment['ref'] = lRefNum
 

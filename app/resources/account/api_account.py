@@ -15,12 +15,6 @@ def account_get_info(id):
 
 	return jsonify(account), 200
 
-@mod_account.route('/accounts/<string:id>/balance/', methods=['GET'])
-def account_balance(id):
-	balance = ot_account.balance(id)
-
-	return jsonify(balance)
-
 @mod_account.route('/accounts/<string:id>/inbox', methods=['GET'])
 def account_inbox(id):
 	inbox = ot_account.inbox(id)
