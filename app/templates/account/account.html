@@ -1,7 +1,28 @@
 {% extends "base.html" %}
 {% block head %}
 <script type="text/javascript">
+$(document).ready(function(){
+	$('.action-accept').on('click', function(e){
+		e.preventDefault();
 
+		var index = $(this).data('index');
+
+		$('#inbox-'+index).css('opacity', 0.5);
+		$('#inbox-'+index+' button').prop('disabled', true);
+
+		$.ajax({
+			url: '/api/accounts/{{account.id}}/inbox/accept',
+			contentType: 'application/json',
+			data: JSON.stringify({indices: [index]}),
+			method: 'PUT'
+		}).success(function(data){
+			window.location.reload();
+		}).fail(function(data){
+			$('#inbox-'+index).css('opacity', 1);
+			$('#inbox-'+index+' button').prop('disabled', false);
+		});
+	});
+});
 </script>
 {% endblock %}
 {% block content %}
@@ -67,6 +88,7 @@
 				<table class="table table-box">
 					<thead>
 						<tr>
+							<th></th>
 							<th class="index">Index</th>
 							<th class="from-to">From</th>
 							<th class="transaction-id">Transaction Id</th>
@@ -78,15 +100,43 @@
 					</thead>
 					<tbody>
 						{% for payment in inbox.inbox %}
-						<tr>
+						<tr id="inbox-{{payment.index}}">
 							<td>
-								<span class="badge">{{payment.index}}</span>
+								<input class="outbox-selected" type="checkbox" value="{{payment.index}}"/>
 							</td>
+							<td><span class="badge">{{payment.index}}</span></td>
 							<td>{{payment.from.accountId}} ({{payment.from.id}})</td>
 							<td>{{payment.transactionId}}</td>
 							<td>{{payment.ref}}</td>
 							<td>{{payment.formattedAmount}} ({{payment.amount}})</td>
 							<td>{{payment.status}}</td>
+							<td>
+								<div class="btn-group">
+								<button type="button" class="btn btn-xs btn-default dropdown-toggle" data-toggle="dropdown">
+										Action <span class="glyphicon glyphicon-transfer"></span>
+										<span class="caret"></span>
+									</button>
+									<ul class="dropdown-menu">
+										<li><a href="#" class="action-accept" data-index="{{payment.index}}">Accept</a></li>
+										<li><a href="#">Discard</a></li>
+									</ul>
+								</div>
+							</td>
+						</tr>
+						{% endfor %}
+					</tbody>
+					<tfoot>
+						<tr class="active">
+							<td>
+								<input class="outbox-select-all" type="checkbox"/>
+							</td>
+							<td colspan="2">
+								Select all
+							</td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
 							<td>
 								<div class="btn-group">
 								<button type="button" class="btn btn-xs btn-default dropdown-toggle" data-toggle="dropdown">
@@ -101,8 +151,7 @@
 								</div>
 							</td>
 						</tr>
-						{% endfor %}
-					</tbody>
+					</tfoot>
 				</table>
 			</div>
 			{% endif %}
@@ -123,6 +172,7 @@
 				<table class="table">
 					<thead>
 						<tr>
+							<th></th>
 							<th>Index</th>
 							<th>To</th>
 							<th>Transaction Id</th>
@@ -136,8 +186,9 @@
 						{% for payment in outbox.outbox %}
 						<tr>
 							<td>
-								<span class="badge">{{payment.index}}</span>
+								<input class="outbox-selected" type="checkbox" value="{{payment.index}}"/>
 							</td>
+							<td><span class="badge">{{payment.index}}</span></td>
 							<td>{{payment.to.accountId}} ({{payment.to.id}})</td>
 							<td>{{payment.transactionId}}</td>
 							<td>{{payment.ref}}</td>
