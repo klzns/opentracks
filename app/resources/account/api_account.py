@@ -1,5 +1,5 @@
 from . import ot_account
-from flask import Blueprint, jsonify
+from flask import Blueprint, jsonify, request
 
 mod_account = Blueprint('account', __name__, template_folder='templates')
 
@@ -33,4 +33,21 @@ def account_refresh(id):
 
 	statusCode = 500 if 'error' in result else 200
 
-	return jsonify(result). statusCode
+	return jsonify(result), statusCode
+
+@mod_account.route('/accounts/<string:id>/inbox/accept', methods=['PUT'])
+def account_inbox_accept(id):
+	data = request.get_json()
+
+	indices = ''
+	if 'indices' in data:
+		indicesLen = len(data['indices'])
+		if indicesLen is 1:
+			indices = data['indices'][0]
+		else:
+			indices = ','.join(map(str, data['indices']))
+
+	result = ot_account.accept_inbox_items(id, 0, indices)
+
+	return jsonify(result)
+
