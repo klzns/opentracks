@@ -1,4 +1,8 @@
-import os, urllib, sys, time, json
+import os
+import urllib
+import sys
+import time
+import json
 
 # import Open-Transactions
 from otapi import otapi
@@ -13,6 +17,7 @@ from webapp import app as application
 from webapp import configure_blueprints
 from webapp import BLUEPRINTS
 
+
 class WebApp(QThread):
     def setApplication(self, obj, configure_blueprints, BLUEPRINTS):
         self.application = obj
@@ -22,6 +27,7 @@ class WebApp(QThread):
     def run(self):
         self.configure_blueprints(self.application, self.BLUEPRINTS)
         self.application.run()
+
 
 def main():
     global web, env
@@ -47,7 +53,7 @@ def main():
     qr = web.frameGeometry()
     cp = QDesktopWidget().availableGeometry().center()
     qr.moveCenter(cp)
-    web.move(qr.topLeft())  
+    web.move(qr.topLeft())
 
     web.setUrl('http://127.0.0.1:5000/')
 

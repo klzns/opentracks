@@ -14,11 +14,13 @@ db.init_app(app)
 # Take care of blueprints
 BLUEPRINTS = ['account', 'asset', 'nym', 'server', 'wallet', 'transaction']
 
+
 def __import_variable(module):
     path = 'resources.'+module+'.api_'+module
     variable_name = 'mod_'+module
     mod = __import__(path, fromlist=[variable_name])
     return getattr(mod, variable_name)
+
 
 def configure_blueprints(app, blueprints):
     for k in blueprints:
