@@ -1,51 +1,31 @@
 from otapi import otapi
 
 
-def interpretTransactionMsgReply(serverId, userId, accId, attempt, response):
-
-    if response is -1:
-        print "Message error: "+attempt
-        return False
-    elif response is 0:
-        print "Server reply ("+attempt+"): Message failure."
-        return False
-
-    balanceSuccess = otapi.OTAPI_Basic_Transaction_GetBalanceAgreementSuccess(serverId, userId, accId, response)
-
-    if balanceSuccess is -1:
-        print "Balance agreement error: "+attempt
-        return False
-    elif balanceSuccess is 0:
-        print "Server reply ("+attempt+"): Balance agreement failure."
-        return False
-
-    transSuccess = otapi.OTAPI_Basic_Message_GetTransactionSuccess(serverId, userId, accId, response)
-
-    if transSuccess is -1:
-        print "Transaction error: "+attempt
-        return False
-    elif transSuccess is 0:
-        print "Server reply ("+attempt+"): Transaction failure."
-        return False
-
-    return True
-
-
-def send_transfer(myAccId, hisAccId, amount, note):
+def send_transfer(myAccId, hisAccId, amount, memo):
     myAccId = str(myAccId)
     hisAccId = str(hisAccId)
     amount = str(amount)
-    note = str(note)
+    memo = str(memo)
 
     myNymId = otapi.OTAPI_Basic_GetAccountWallet_NymID(myAccId)
 
     if not myNymId:
-        return {'error': 'Unable to find NymID (for sender) based on myAccId.\n The designated asset account must be yours. OT will find the Nym based on the account.'}
+        errorMessage = (
+            "Unable to find NymID (for sender) based on myAccId.\n"
+            "The designated asset account must be yours."
+            "OT will find the Nym based on the account."
+        )
+        return {'error': errorMessage}
 
     myServerId = otapi.OTAPI_Basic_GetAccountWallet_ServerID(myAccId)
 
     if not myServerId:
-        return {'error': 'Unable to find ServerID based on myAccId.\n The designated asset account must be yours. OT will find the Server based on the account.'}
+        errorMessage = (
+            "Unable to find ServerID based on myAccId.\n"
+            "The designated asset account must be yours. "
+            "OT will find the Server based on the account."
+        )
+        return {'error': errorMessage}
 
     hisServerId = otapi.OTAPI_Basic_GetAccountWallet_ServerID(hisAccId)
 
@@ -54,7 +34,13 @@ def send_transfer(myAccId, hisAccId, amount, note):
         hisServerId = myServerId
 
     if myServerId != hisServerId:
-        return {'error': 'hisAccId is not on the same server as myAccId (he\'s on '+hisServerId+' but myAccId is on '+myServerId+'). You must choose either a different sender account or a different recipient account'}
+        errorMessage = (
+            "hisAccId is not on the same server as myAccId "
+            "(he's on "+hisServerId+" but myAccId is on "+myServerId+"). "
+            "You must choose either a different sender account or a "
+            "different recipient account"
+        )
+        return {'error': errorMessage}
 
     assetTypeId = otapi.OTAPI_Basic_GetAccountWallet_AssetTypeID(myAccId)
 
@@ -62,17 +48,29 @@ def send_transfer(myAccId, hisAccId, amount, note):
 
     objEasy = otapi.OTMadeEasy()
 
-    response = objEasy.send_transfer(myServerId, myNymId, myAccId, hisAccId, assetAmount, note)
+    response = objEasy.send_transfer(myServerId, myNymId, myAccId,
+                                     hisAccId, assetAmount, memo)
     attempt = 'send_transfer'
 
-    interpretReply = interpretTransactionMsgReply(myServerId, myNymId, myAccId, attempt, response)
+    interpretReply = objEasy.InterpretTransactionMsgReply(
+        myServerId, myNymId, myAccId, attempt, response)
 
-    if interpretReply:
-        # Download all the intermediary files (account balance, inbox, outbox, etc)
+    if int(interpretReply) is not -1:
+        # Download all the intermediary files
+        # (account balance, inbox, outbox, etc)
         # since they have probably changed from this operation.
-        retrieved = objEasy.retrieve_account(myServerId, myNymId, myAccId, True)
+        retrieved = objEasy.retrieve_account(myServerId, myNymId,
+                                             myAccId, True)
 
         print 'Server response ('+attempt+'): SUCCESS sending transfer!'
-        print ('Success' if retrieved else 'Failed') + ' retrieving intermediary files for account.'
+        if retrieved:
+            print "Success retrieving intermediary files for account."
+        else:
+            print "Failed retrieving intermediary files for account."
 
-    return {'transaction': True}
+        return {'transaction': True}
+    else:
+        errorMessage = (
+            "Unexpected error. Verify if the accounts really exist."
+        )
+        return {'error': errorMessage}
