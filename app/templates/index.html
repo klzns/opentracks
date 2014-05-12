@@ -1,11 +1,9 @@
 {% extends "base.html" %}
-{% block head %}
-<script type="text/javascript">
-
-</script>
+{% block title %}
+OpenTracks
 {% endblock %}
-{% block content %}
-	
+
+{% block content %}	
 	<h3>
 		Accounts
 		<button class="btn btn-primary btn-sm">New Account</button>
@@ -13,7 +11,7 @@
 	{% for currentNym in stat.nyms %}
 		<div class="panel panel-default">
 			<div class="panel-heading">
-				<h4><span class="nym-icon glyphicon glyphicon-user"></span> <a href="/nym/{{currentNym.id}}">{{currentNym.name}}</a></h4>
+				<h4><i class="nym-icon fa fa-user"></i> <a href="/nym/{{currentNym.id}}">{{currentNym.name}}</a></h4>
 			</div>
 			<div class="panel-body">
 				<div class="row">

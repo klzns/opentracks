@@ -49,6 +49,13 @@ def account_page(accountId):
                            inbox=inbox, outbox=outbox)
 
 
+@mod_web.route('/account/<string:accountId>/transaction', methods=['GET'])
+def account_transaction_page(accountId):
+    account = ot_account.get_account_info(accountId)['account']
+
+    return render_template('account/transaction.html', account=account)
+
+
 @mod_web.route('/stat')
 def stat():
     return jsonify(ot.stat())

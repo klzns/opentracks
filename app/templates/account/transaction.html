@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+
+{% block title %}
+New Transaction ({{account.name}}) - OpenTracks
+{% endblock %}
+
+{% block content %}
+<ol class="breadcrumb">
+	<li><a href="/">Home</a></li>
+	<li><a href="/nym/{{account.nym.id}}">{{account.nym.name}}</a></li>
+	<li><a href="/account/{{account.id}}">{{account.name}}</a></li>
+	<li class="active">New Transaction</li>
+</ol>
+
+<div class="row">
+	<div class="col-md-6">
+		<h1 class="no-margin">New Transaction</h1>
+	</div>
+</div>
+
+<div class="row upper-margin">
+	<div class="col-md-6">
+		<form method="POST" action="/api/transaction/transfer" id="send-form" role="form">
+			<fieldset>
+				<input type="hidden" name="type" value="send">
+				<input type="hidden" name="myAccId" value="{{account.id}}">
+				<legend>Send Payment</legend>
+				<div class="form-group">
+					<label for="senderNym">From</label>
+					<p class="form-control-static">{{account.name}} ({{account.id}})</p>
+				</div>
+				<div class="form-group">
+					<label for="hisAccId">To</label>
+					<input type="text" id="hisAccId" class="form-control" name="hisAccId" placeholder="Account ID"/>
+				</div>
+				<div class="form-group">
+					<label for="assetName">Asset</label>
+					<p class="form-control-static">{{account.asset.name}}</p>
+				</div>
+				<div class="form-group">
+					<label for="amount">Amount</label>
+					<input type="text" id="amount" class="form-control" name="amount" placeholder="0" />
+					<span class="help-block">Your account balance: {{account.formattedBalance}}</span>
+				</div>
+				<div class="form-group">
+					<label for="memo">Message</label>
+					<textarea id="memo" class="form-control" rows="3" name="memo"></textarea>
+				</div>
+				<div class="result">
+				</div>
+				<button type="submit" class="col-md-offset-9 col-md-3 btn btn-primary">Send</button>
+			</fieldset>
+		</form>
+	</div>
+	<div class="col-md-6">
+		<form method="POST" action="/" id="request-form" role="form">
+			<fieldset>
+				<input type="hidden" name="type" value="request">
+				<legend>Request Payment</legend>
+				<div class="form-group">
+					<label for="senderNym">From</label>
+					<input type="text" id="senderNym" class="form-control" name="senderNym" placeholder="Account ID"/>
+				</div>
+				<div class="form-group">
+					<label for="recipientNym">To</label>
+					<p class="form-control-static">{{account.name}} ({{account.id}})</p>
+				</div>
+				<div class="form-group">
+					<label for="assetName">Asset</label>
+					<p class="form-control-static">{{account.asset.name}}</p>
+				</div>
+				<div class="form-group">
+					<label for="amount">Amount</label>					
+					<input type="text" id="amount" class="form-control" name="amount" placeholder="0" />
+				</div>
+				<div class="form-group">
+					<label for="memo">Message</label>
+					<textarea id="memo" class="form-control" rows="3" name="memo"></textarea>
+				</div>
+				<div class="result">
+				</div>
+				<button type="submit" class="col-md-offset-9 col-md-3 btn btn-primary">Request</button>
+			</fieldset>
+		</form>			
+	</div>
+
+</div>
+{% endblock %}

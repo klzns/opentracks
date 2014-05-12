@@ -1,8 +1,22 @@
 .main { 
 	padding: 15px;
 }
-h1 {
-	font-weight: light;
+
+h1 { font-weight: light; }
+
+dd, dt { line-height: 28px; height: 30px; }
+
+.no-margin {
+	margin: 0;
+}
+
+.account-balance {
+	font-size: 30px;
+}
+
+.transaction-container {
+	margin-top: 10px;
+	margin-bottom: 10px;
 }
 
 .account-info .dl-horizontal dt{
@@ -13,4 +27,15 @@ h1 {
 	margin-left: 60px;
 	overflow: hidden;
 	text-overflow: ellipsis;
+}
+
+.upper-margin {
+	margin-top: 10px;
+}
+
+.fa-spin { -webkit-filter: blur(0); }
+
+.result {
+	-webkit-transition: all 500ms ease;
+	transition: all 500ms ease;
 }

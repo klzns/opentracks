@@ -1,11 +1,10 @@
 {% extends "base.html" %}
-{% block head %}
-<script type="text/javascript">
 
-</script>
+{% block title %}
+{{accounts[0].nym.name}} - OpenTracks
 {% endblock %}
-{% block content %}
 
+{% block content %}
 	<ol class="breadcrumb">
 		<li><a href="/">Home</a></li>
 		<li class="active">{{accounts[0].nym.name}}</li>
@@ -32,5 +31,4 @@
 	</div>
 	{% endfor %}
 	</div>
-
 {% endblock %}

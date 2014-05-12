@@ -1,0 +1,81 @@
+<div class="panel panel-primary">
+	<div class="panel-heading">
+		<h3 class="panel-title"><i class="fa fa-long-arrow-up"></i> Outbox</h3>
+	</div>
+	{% if outbox.outbox|length < 1 %}
+	<div class="panel-body">
+		Empty outbox.
+	</div>
+	{% else %}
+	<div class="table-responsive">
+		<table class="table">
+			<thead>
+				<tr>
+					<th></th>
+					<th>Index</th>
+					<th>To</th>
+					<th>Transaction Id</th>
+					<th>Ref</th>
+					<th>Amount</th>
+					<th>Status</th>
+					<th>Action</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for payment in outbox.outbox %}
+				<tr>
+					<td>
+						<input class="outbox-selected" type="checkbox" value="{{payment.index}}"/>
+					</td>
+					<td><span class="badge">{{payment.index}}</span></td>
+					<td>{{payment.to.accountId}} ({{payment.to.id}})</td>
+					<td>{{payment.transactionId}}</td>
+					<td>{{payment.ref}}</td>
+					<td>{{payment.formattedAmount}} ({{payment.amount}})</td>
+					<td>{{payment.status}}</td>
+					<td>
+						<div class="btn-group">
+						<button type="button" class="btn btn-xs btn-default dropdown-toggle" data-toggle="dropdown">
+								Action <span class="glyphicon glyphicon-transfer"></span>
+								<span class="caret"></span>
+							</button>
+							<ul class="dropdown-menu">
+								<li><a href="#" class="action-accept" data-index="{{payment.index}}" data-account="{{account.id}}">Accept</a></li>
+								<li><a href="#">Discard</a></li>
+							</ul>
+						</div>
+					</td>
+				</tr>
+				{% endfor %}
+			</tbody>
+			<tfoot>
+				<tr class="active">
+					<td>
+						<input class="outbox-select-all" type="checkbox"/>
+					</td>
+					<td colspan="2">
+						Select all
+					</td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td>
+						<div class="btn-group">
+						<button type="button" class="btn btn-xs btn-default dropdown-toggle" data-toggle="dropdown">
+								Action <span class="glyphicon glyphicon-transfer"></span>
+								<span class="caret"></span>
+							</button>
+							<ul class="dropdown-menu">
+								<li><a href="#">Dropdown link</a></li>
+								<li class="divider"></li>
+								<li><a href="#">Dropdown link</a></li>
+							</ul>
+						</div>
+					</td>
+				</tr>
+			</tfoot>
+		</table>
+	</div>
+	{% endif %}
+</div>
