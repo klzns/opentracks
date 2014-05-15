@@ -33,7 +33,7 @@
 		<dd><h5>Asset</h5></dd>
 		<div class="text-muted">
 			<dt>
-				<button class="btn btn-xs copy-clipboard" data-clipboard="#asset-id">
+				<button class="btn btn-xs copy-clipboard" data-clipboard="{{account.asset.id}}">
 					<i class="fa fa-clipboard"></i>
 				</button> Id
 			</dt>
@@ -47,7 +47,7 @@
 		<dd><h5>Nym</h5></dd>
 		<div class="text-muted">
 			<dt>
-				<button class="btn btn-xs copy-clipboard" data-clipboard="#nym-id">
+				<button class="btn btn-xs copy-clipboard" data-clipboard="{{account.nym.id}}">
 					<i class="fa fa-clipboard"></i>
 				</button> Id</dt>
 			<dd id="nym-id">{{account.nym.id}}</dd>
@@ -60,7 +60,7 @@
 		<dd><h5>Server</h5></dd>
 		<div class="text-muted">
 			<dt>
-				<button class="btn btn-xs copy-clipboard" data-clipboard="#server-id">
+				<button class="btn btn-xs copy-clipboard" data-clipboard="{{account.server.id}}">
 					<i class="fa fa-clipboard"></i>
 				</button> Id</dt>
 			<dd id="server-id">{{account.server.id}}</dd>

@@ -18,6 +18,18 @@ from webapp import configure_blueprints
 from webapp import BLUEPRINTS
 
 
+class WebPage(QWebPage):
+    # Handles Javascript Alerts
+    def javaScriptAlert(self, frame, data):
+        print data
+        receiveData(data)
+
+    # Print Javascript Console
+    def javaScriptConsoleMessage(self, msg, line, source):
+        file = source.split('/')
+        print '%s line %d: %s' % (file[len(file)-1], line, msg)
+
+
 class WebApp(QThread):
     def setApplication(self, obj, configure_blueprints, BLUEPRINTS):
         self.application = obj
@@ -29,8 +41,20 @@ class WebApp(QThread):
         self.application.run()
 
 
+def receiveData(data):
+    # Try to decode JSON
+    try:
+        data = json.loads(data)
+    except:
+        return
+
+    if data['instruction'] == 'clipboard':
+        clipboard = app.clipboard()
+        clipboard.setText(data['value'])
+
+
 def main():
-    global web, env
+    global web, env, app
 
     # Init Flask server
     webappThread = WebApp()
@@ -55,6 +79,8 @@ def main():
     qr.moveCenter(cp)
     web.move(qr.topLeft())
 
+    page = WebPage()
+    web.setPage(page)
     web.setUrl('http://127.0.0.1:5000/')
 
     # Bind shut down

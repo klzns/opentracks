@@ -79,20 +79,20 @@ $(document).ready(function(){
         })
     });
 
-    $('.copy-clipboard').zclip({
-        path:'/static/libs/ZeroClipboard.swf',
-        copy: function() {
-            var elem = $(this).data('clipboard');
-            if (!elem) {
-                return $(this).parent().text().trim();
-            }
-            if ($(elem).is('input')) {
-                return $(elem).val().trim();
-            }
-            return $(elem).text().trim();
-        },
-        afterCopy: function() {}
-    });
+    if (window.desktop) {
+        $('.copy-clipboard').on('click', function(){
+            var text = $(this).data('clipboard');
+            alert(JSON.stringify({"instruction": "clipboard", "value": text}));
+        });
+    } else {
+        $('.copy-clipboard').zclip({
+            path:'/static/libs/ZeroClipboard.swf',
+            copy: function() {
+                return $(this).data('clipboard');
+            },
+            afterCopy: function() {}
+        });
+    }
 
     $('#new-nym').on('submit', function(e){
         e.preventDefault();
