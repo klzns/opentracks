@@ -18,7 +18,7 @@ OpenTracks
 					{% for account in stat.accounts %}
 						{% if currentNym.id == account.nym.id %}
 						<div class="col-md-4">
-							<p><b>{{account.name}}</b></p>
+							<p><b>{% if account.name %}{{account.name}}{% else: %}Empty label{% endif %}</b></p>
 							<p>{{account.formattedBalance}}</p>
 						</div>
 						{% endif %}

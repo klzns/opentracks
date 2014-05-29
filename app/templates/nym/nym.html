@@ -16,7 +16,17 @@
 	<div class="col-md-4">
 		<div class="panel panel-default">
 			<div class="panel-heading">
-				<a href="/account/{{account.id}}">{{account.name}}</a>
+				<a href="/account/{{account.id}}">
+					{% if account.name %}
+					{{account.name}}
+					{% else: %}
+					Empty label
+					{% endif %}
+				</a>
+
+				<button class="btn btn-default btn-xs btn-refresh pull-right" data-account="{{account.id}}" title="Refresh">
+					<i class="fa fa-refresh"></i>
+				</button>
 			</div>
 			<div class="panel-body">
 				<p><b>Asset:</b> {{account.asset.name}}</p>
