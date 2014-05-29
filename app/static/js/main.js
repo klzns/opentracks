@@ -52,6 +52,21 @@ $(document).ready(function(){
         });
     });
 
+    $('#add-asset').on('submit', function(e){
+        e.preventDefault();
+        $.ajax({
+            url: '/api/wallet/asset',
+            method: 'POST',
+            dataType: 'json',
+            contentType: 'application/json',
+            data: JSON.stringify({
+                contract: $('#asset-contract').val()
+            })
+        }).done(function(data){
+            window.location.replace("/");
+        });
+    });
+
     $('#send-form').on('submit', function(e){
         e.preventDefault();
         var data = $(":input", this).serializeArray();
