@@ -35,6 +35,15 @@ def nym_post():
     return jsonify(nym), 200
 
 
+@mod_nym.route('/nym/<string:nym>/register/<string:server>', methods=['POST'])
+def nym_register(nym, server):
+    result = ot_nym.register(nym, server)
+
+    statusCode = 500 if 'error' in result else 200
+
+    return jsonify(result), statusCode
+
+
 @mod_nym.route('/nyms/<string:nym>/name/<string:name>', methods=['POST'])
 def nym_name_post(nym, name):
     result = ot_nym.set_name(nym, name)

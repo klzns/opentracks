@@ -9,6 +9,19 @@ def create():
     return {'nym': result}
 
 
+def register(myNymId, serverId):
+    myNymId = str(myNymId)
+    serverId = str(serverId)
+
+    objEasy = otapi.OTMadeEasy()
+    result = objEasy.register_nym(serverId, myNymId)
+
+    if result:
+        return {'nym': 'registered'}
+    else:
+        return {'error': 'Failed registering nym\n'+result}
+
+
 def count():
     result = otapi.OTAPI_Basic_GetNymCount()
 
