@@ -12,10 +12,9 @@ def create():
 def count():
     result = otapi.OTAPI_Basic_GetNymCount()
 
-    if result is -1:
-        return {'error': 'There are apparently no Nyms in this wallet.'}
-    else:
-        return {'count': count}
+    if result < 1:
+        return {'count': 0}
+    return {'count': result}
 
 
 def set_name(nym, name):

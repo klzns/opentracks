@@ -5,7 +5,7 @@ def count():
     result = otapi.OTAPI_Basic_GetAssetTypeCount()
 
     if result < 1:
-        return {'error': 'There aren\'t any asset in this wallet.'}
+        return {'count': 0}
     return {'count': result}
 
 
@@ -28,4 +28,4 @@ def get_all():
         asset = get_asset_info(strID)['asset']
         assets.append(asset)
 
-    return { 'assets': assets }
+    return {'assets': assets}

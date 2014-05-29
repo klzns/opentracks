@@ -2,7 +2,11 @@ from otapi import otapi
 
 
 def count():
-    return otapi.OTAPI_Basic_GetAccountCount()
+    result = otapi.OTAPI_Basic_GetAccountCount()
+
+    if result < 1:
+        return {'count': 0}
+    return {'count': result}
 
 
 def get_account_info(myAccId):
@@ -37,7 +41,7 @@ def get_account_info(myAccId):
 
 
 def get_all():
-    nAccountCount = count()
+    nAccountCount = count()['count']
 
     accounts = []
     for i in range(nAccountCount):
