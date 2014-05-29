@@ -1,4 +1,5 @@
 from otapi import otapi
+from resources.nym import ot_nym
 
 
 def count():
@@ -61,6 +62,26 @@ def accounts_for_nym(nym):
             accounts.append(acc)
 
     return {'accounts': accounts}
+
+
+def create_account(myNymId, serverId, assetId):
+    myNymId = str(myNymId)
+    serverId = str(serverId)
+    assetId = str(assetId)
+
+    if not otapi.OTAPI_Basic_IsNym_RegisteredAtServer(myNymId, serverId):
+        # If the Nym's not registered at the server, then register him first.
+        result = ot_nym.register(myNymId, serverId)
+        if 'error' in result:
+            return result
+
+    objEasy = otapi.OTMadeEasy()
+    result = objEasy.create_asset_acct(serverId, myNymId, assetId)
+
+    if result:
+        return {'create': 'created'}
+    else:
+        return {'error': 'Failed trying to create account\n'+result}
 
 
 def outbox(myAccId):
