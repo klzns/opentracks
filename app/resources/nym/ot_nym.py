@@ -41,6 +41,8 @@ def set_name(nym, name):
 
 
 def get_nym_info(nymId):
+    nymId = str(nymId)
+
     nym = {}
     nym["id"] = nymId
     nym["name"] = otapi.OTAPI_Basic_GetNym_Name(nymId)

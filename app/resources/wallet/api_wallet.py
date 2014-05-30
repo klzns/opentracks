@@ -13,7 +13,7 @@ def add_server():
     result = ot_wallet.add_server(jsonRequest['contract'])
 
     if result:
-        return jsonify({}), 201
+        return jsonify({'server': result}), 201
     else:
         return jsonify({"error": "Bad contract"}), 400
 
