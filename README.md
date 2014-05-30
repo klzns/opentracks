@@ -3,7 +3,7 @@ opentracks
 
 ## Setup
 
-First, build Open-Transactions system wide with the Python flag on.
+First, build Open-Transactions system wide with the Python flag on and copy the `otapi.py` to `app/otapi/`.
 
 Setup a virtual environment
 
