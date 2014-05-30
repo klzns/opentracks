@@ -1,22 +1,25 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="main">
-    <div class="row">
-        <div class="col-lg-12">
-        <h1>Welcome! <small>Let's set up your brand new wallet</small></h1>
+<div class="main setup setup-asset">
+  <div class="row">
+    <div class="col-md-offset-2 col-md-7">
+      <h1>Welcome!</h1>
+      <h2><small>Let's set up your brand new wallet</small></h2>
 
-        <div class="progress">
-          <div class="progress-bar" role="progressbar" aria-valuenow="99" aria-valuemin="0" aria-valuemax="100" style="width: 99%;">
-            3/3 steps
-          </div>
+      <div class="progress">
+        <div class="progress-bar" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100" style="width: 75%;">
+          3/4 steps
         </div>
+      </div>
+
+      <div class="existing-asset-container">
         <p>Please paste an Asset contract in the field bellow.</p>
-        
-        <form id="add-asset" action="/api/wallet/asset" method="POST">
-            <div class="form-group">
-                <label class="control-label" for="asset-contract">Server Contract</label>
-                <textarea class="form-control" id="asset-contract" rows="10" name="contract">
+
+        <form id="existing-asset-form" action="/api/wallet/asset" method="POST">
+          <div class="form-group">
+            <label class="control-label" for="existing-asset-contract">Asset Contract</label>
+            <textarea class="form-control" id="existing-asset-contract" rows="10" name="contract">
 -----BEGIN SIGNED CONTRACT-----
 Hash: SAMY
 
@@ -327,11 +330,12 @@ CoABecZhFi5/LVNHXpkDVirduj+w9hM1QpVfV0wyUWy+gn15MEoM0WIMgYzCridZ
 5Z/THtCMK1/wdLb5OUBrYrgeVKn+lf1qzRFm6Am/3X+k+7ohKEnIF1ODEQWO1V8M
 /rHlRwIq1xCnt/8myutAM5NzPkv7Qj2ysn5aNbqCcoSBIcE=
 -----END CONTRACT SIGNATURE-----
-                </textarea>
-            </div>
-            <p class="pull-right"><input type="submit" class="btn btn-primary btn-lg"/></p>
-            </form>
-        </div>
+            </textarea>
+          </div>
+          <p class="pull-right"><input type="submit" class="btn btn-primary btn-lg"/></p>
+        </form>
+      </div> <!-- existing-asset-container -->
     </div>
+  </div>
 </div>
 {% endblock %}

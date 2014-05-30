@@ -34,6 +34,8 @@ def index():
             session['setup'] = 3
         elif accountCount == 0:
             session['setup'] = 4
+        else:
+            session['setup'] = 5
         return redirect(url_for('web.setup'))
 
     if serverCount == 0:
@@ -62,7 +64,6 @@ def setup():
         TEMPLATE_FILE = 'setup/step3.html'
     elif session['setup'] == 4:
         stat = ot.stat()
-        print stat
         if 'nyms' in stat and stat['nyms'][0]:
             myNymId = stat['nyms'][0]['id']
         if 'servers' in stat and stat['servers'][0]:
@@ -70,8 +71,16 @@ def setup():
         if 'assets' in stat and stat['assets'][0]:
             assetId = stat['assets'][0]['id']
 
-        ot_account.create_account(myNymId, serverId, assetId)
+        accounts = ot_account.get_all()
+        if len(accounts['accounts']) == 0:
+            ot_account.create_account(myNymId, serverId, assetId)
+            accounts = ot_account.get_all()
 
+        myAccId = accounts['accounts'][0]['id']
+
+        TEMPLATE_FILE = 'setup/step4.html'
+        return render_template(TEMPLATE_FILE, myAccId=myAccId)
+    else:
         session.pop('setup', None)
         return redirect(url_for('web.index'))
 
@@ -105,6 +114,13 @@ def account_transaction_page(accountId):
     account = ot_account.get_account_info(accountId)['account']
 
     return render_template('account/transaction.html', account=account)
+
+
+def set_setup_session():
+    nyms = ot_nym.get_all()
+    session['myNymId'] = nyms['nyms'][0]['id']
+    servers = ot_server.get_all()
+    session['serverId'] = servers['servers'][0]['id']
 
 
 @mod_web.route('/stat')

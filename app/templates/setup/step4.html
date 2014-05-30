@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="main">
+  <div class="row">
+    <div class="col-md-offset-2 col-md-7">
+      <h1>Welcome!</h1>
+      <h2><small>Let's set up your brand new wallet</small></h2>
+
+      <div class="progress">
+        <div class="progress-bar" role="progressbar" aria-valuenow="90" aria-valuemin="0" aria-valuemax="100" style="width: 90%;">
+          4/4 steps
+        </div>
+      </div>
+      <p>Give a name for your first Account <span class="text-muted">(you can change it later)</span></p>
+      <form id="change-account-name" action="/api/accounts/" method="POST">
+        <input type="hidden" value="{{myAccId}}" id="account-id">
+        <div class="form-group">
+          <label for="account-name">Name</label>
+          <input type="text" id="account-name" class="form-control" name="name" placeholder="Account name"/>
+        </div>
+        <p class="pull-right"><input type="submit" class="btn btn-primary btn-lg"/></p>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

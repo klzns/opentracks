@@ -1,20 +1,20 @@
-    {% extends "base.html" %}
+{% extends "base.html" %}
 
-    {% block content %}
-    <div class="main">
-        <div class="row">
-            <div class="col-md-12">
-                <h1>New Nym</h1>
-                <p>Give a name for you Pseudonym.</p>
-                <form id="new-nym" action="/api/nyms" method="POST">
-                    <div class="form-group">
-                        <label class="control-label">Name
-                        <input type="text" name="name" id="nym-name"/>
-                        </label>
-                    </div>
-                    <p class="pull-right"><input type="submit" class="btn btn-primary btn-lg"/></p>
-                </form>
-            </div>
+{% block content %}
+<div class="main">
+    <div class="row">
+        <div class="col-md-12">
+            <h1>New Nym</h1>
+            <p>Give a name for you Pseudonym.</p>
+            <form id="new-nym" action="/api/nyms" method="POST">
+                <div class="form-group">
+                    <label class="control-label">Name
+                    <input type="text" name="name" id="nym-name"/>
+                    </label>
+                </div>
+                <p class="pull-right"><input type="submit" class="btn btn-primary btn-lg"/></p>
+            </form>
         </div>
     </div>
-    {% endblock %}
+</div>
+{% endblock %}
