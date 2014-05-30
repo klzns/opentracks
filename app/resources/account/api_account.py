@@ -32,6 +32,13 @@ def account_get_info(id):
     return jsonify(account), 200
 
 
+@mod_account.route('/accounts/<string:id>/name/<string:name>', methods=['PUT'])
+def account_change_name(id, name):
+    account = ot_account.change_account_name(id, name)
+
+    return jsonify(account), 200
+
+
 @mod_account.route('/accounts/<string:id>/inbox', methods=['GET'])
 def account_inbox(id):
     inbox = ot_account.inbox(id)

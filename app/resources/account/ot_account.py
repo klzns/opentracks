@@ -53,6 +53,27 @@ def get_all():
     return {'accounts': accounts}
 
 
+def change_account_name(myAccId, name):
+    myAccId = str(myAccId)
+    name = str(name)
+
+    myNymId = otapi.OTAPI_Basic_GetAccountWallet_NymID(myAccId)
+
+    if not myNymId:
+        errorMessage = (
+            "Unable to find NymID based on myAccId\nThe designated asset "
+            "account must be yours. OT will find the Nym based on the account."
+        )
+        return {'error': errorMessage}
+
+    result = otapi.OTAPI_Basic_SetAccountWallet_Name(myAccId, myNymId, name)
+
+    if result:
+        return {'account': 'name-changed'}
+    else:
+        return {'error': 'Failed trying to set account label to:'+name}
+
+
 def accounts_for_nym(nym):
     all_accounts = get_all()['accounts']
 
