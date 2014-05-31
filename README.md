@@ -53,3 +53,6 @@ Then
 python app/opentracks.py
 ```
 
+## REST API
+
+[Docs](http://api-portal.anypoint.mulesoft.com/open-tracks/api/open-tracks-rest-api/docs/raml) (under development)
