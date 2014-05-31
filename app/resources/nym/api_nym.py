@@ -62,15 +62,6 @@ def nym_count():
     return jsonify(count), statusCode
 
 
-@mod_nym.route('/nyms/<string:nym>/name/<string:name>', methods=['PUT'])
-def nym_set_name(nym, name):
-    result = ot_nym.set_name(nym, nym, name)
-
-    statusCode = 500 if 'error' in result else 200
-
-    return jsonify(result), statusCode
-
-
 @mod_nym.route('/nyms/<string:id>/outgoing/<string:serverId>', methods=['GET'])
 def nym_outgoing(id, serverId):
     outgoing = ot_nym.outgoing(id)
