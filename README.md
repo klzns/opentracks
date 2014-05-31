@@ -55,4 +55,4 @@ python app/opentracks.py
 
 ## REST API
 
-[Docs](http://api-portal.anypoint.mulesoft.com/open-tracks/api/open-tracks-rest-api/docs/raml) (under development)
+[Docs](http://api-portal.anypoint.mulesoft.com/raml/console?raml=http://api-portal.anypoint.mulesoft.com/open-tracks/api/open-tracks-rest-api/OpenTracks.raml) (under development)
