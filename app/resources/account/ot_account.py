@@ -69,7 +69,7 @@ def change_account_name(myAccId, name):
     result = otapi.OTAPI_Basic_SetAccountWallet_Name(myAccId, myNymId, name)
 
     if result:
-        return {'account': 'name-changed'}
+        return {}  # OK
     else:
         return {'error': 'Failed trying to set account label to:'+name}
 
@@ -100,7 +100,7 @@ def create_account(myNymId, serverId, assetId):
     result = objEasy.create_asset_acct(serverId, myNymId, assetId)
 
     if result:
-        return {'create': 'created'}
+        return {}  # OK
     else:
         return {'error': 'Failed trying to create account\n'+result}
 
@@ -276,7 +276,7 @@ def refresh(myAccId):
 
     if not result:
         return {'error': 'Failed trying to refresh wallet.'}
-    return {'refresh': True}
+    return {}  # OK
 
 
 # PROCESS INBOX, ACCEPTING ALL ITEMS WITHIN...
@@ -414,7 +414,7 @@ def accept_inbox_items(myAccId, nItemType, strIndices):
                 logMessage = (
                     "There were receipts in the box, but they were skipped."
                 )
-                return {'accept': True, 'log': logMessage}
+                return {'log': logMessage}
 
             # -------------------------------------------
             # Below this point, we know strResponseLEDGER needs to be sent,
@@ -443,14 +443,14 @@ def accept_inbox_items(myAccId, nItemType, strIndices):
                     logMessage = (
                         "Failed retrieving intermediary files for account."
                     )
-                    return {'accept': True, 'log': logMessage}
+                    return {'log': logMessage}
 
-                return {'accept': True}
+                return {}  # OK
 
             if not nInterpretReply:
                 return {'error': "Failed accepting inbox items."}
 
-        return {'accept': True, 'log': 'empty'}
+        return {'log': 'empty'}
 
 
 def accept_from_paymentbox(myAccId, strIndices, strPaymentType):
@@ -514,7 +514,7 @@ def accept_from_paymentbox(myAccId, strIndices, strPaymentType):
 
         nHandled = handle_payment_index(myAccId, j, strPaymentType, strInbox)
 
-    return {'accept': True}
+    return {}  # OK
 
 
 def accept_receipts(myAccId, strIndices):
@@ -550,7 +550,7 @@ def accept_money(myAccId):
     # If all five calls succeed, then the total here is 5.
     # So we return success as well (1).
     if (nAcceptedTransfers > -1) or (nAcceptedPurses > -1) or (nAcceptedCheques > -1):
-        return {'accept': True}
+        return {}  # OK
 
     return {'error': 'Failed trying to accept money'}
 
@@ -570,7 +570,7 @@ def accept_payments(myAccId, strIndices):
     # If all two calls succeed, then the total here is 2.
     # So we return success as well (1).
     if (nAcceptedPurses > -1) or (nAcceptedCheques > -1):
-        return {'accept': True}
+        return {}  # OK
 
     return {'error': 'Failed trying to accept all incoming payments.'}
 
@@ -597,7 +597,7 @@ def accept_all(myAccId):
     # If all four calls succeed, then the total here is 4.
     # So we return success as well (1).
     if (nAcceptedInbox + nAcceptedPurses + nAcceptedCheques + nAcceptedInvoices) == 4:
-        return {'accept': True}
+        return {}  # OK
 
     return {'error': 'Failed trying to accept all.'}
 
@@ -796,9 +796,9 @@ def deposit_cheque(serverId, myAccId, myNymId, instrument, type):
             logMessage = (
                 "Failed retrieving intermediary files from account."
             )
-            return {'deposit': True, 'log': logMessage}
+            return {'log': logMessage}
 
-        return {'deposit': True}
+        return {}  # OK
 
     return {'error': "Failed to deposit cheque."}
 
@@ -919,7 +919,7 @@ def deposit_purse(strServerID, strMyAcct, strFromNymID, strInstrument, strIndice
     if nResult is -1:
         return {'error': "Failed depositingCashPurse"}
 
-    return {'deposit': True}
+    return {}  # OK
 
 
 def pay_invoice(myAccId, nTempIndex):
@@ -933,6 +933,6 @@ def pay_invoice(myAccId, nTempIndex):
     nPaidInvoice = handle_payment_index(MyAcct, nIndex, "INVOICE", '')
 
     if nPaidInvoice is 1:
-        return {'payInvoice': True}
+        return {}  # OK
 
     return {'error': "Failed trying to pay invoice."}

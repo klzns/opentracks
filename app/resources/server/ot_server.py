@@ -41,7 +41,7 @@ def register(serverId, myNymId):
     nSuccess = int(strResponse)
 
     if nSuccess is 1:
-        return {'register': True}
+        return {}  # OK
     else:
         if strResponse:
             return {'error': 'Error in register_nym! '+strResponse}

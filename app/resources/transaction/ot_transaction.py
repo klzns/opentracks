@@ -68,7 +68,7 @@ def send_transfer(myAccId, hisAccId, amount, memo):
         else:
             print "Failed retrieving intermediary files for account."
 
-        return {'transaction': True}
+        return {}  # OK
     else:
         errorMessage = (
             "Unexpected error. Verify if the accounts really exist."

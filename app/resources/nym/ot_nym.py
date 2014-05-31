@@ -17,7 +17,7 @@ def register(myNymId, serverId):
     result = objEasy.register_nym(serverId, myNymId)
 
     if result:
-        return {'nym': 'registered'}
+        return {}  # OK
     else:
         return {'error': 'Failed registering nym\n'+result}
 

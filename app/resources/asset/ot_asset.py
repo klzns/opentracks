@@ -47,6 +47,6 @@ def issue(myNymId, serverId, contract):
     result = objEasy.issue_asset_type(serverId, myNymId, contract)
 
     if result:
-        return {'issue': 'issued'}
+        return {}  # OK
     else:
         return {'error': 'Failed trying to issue an asset\n'+result}
