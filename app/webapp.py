@@ -34,10 +34,12 @@ app.register_blueprint(mod_web)
 
 # If this file is called directly
 if __name__ == '__main__':
+    global webapp
+    webapp = True
+
     # Open-Transactions setup
-    otapi.OTAPI_Basic_AppStartup()
-    otapi.OTAPI_Basic_Init()
-    otapi.OTAPI_Basic_LoadWallet()
+    otapi.OTAPI_Wrap_AppInit()
+    otapi.OTAPI_Wrap_LoadWallet()
 
     app.run(use_debugger=True, debug=True,
             use_reloader=False)

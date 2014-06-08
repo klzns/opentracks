@@ -62,9 +62,8 @@ def main():
     webappThread.start()
 
     # Open-Transactions setup
-    otapi.OTAPI_Basic_AppStartup()
-    otapi.OTAPI_Basic_Init()
-    otapi.OTAPI_Basic_LoadWallet()
+    otapi.OTAPI_Wrap_AppInit()
+    otapi.OTAPI_Wrap_LoadWallet()
 
     # Init QT app
     app = QApplication(sys.argv)
@@ -85,8 +84,8 @@ def main():
 
     # Bind shut down
     def shutdown():
+        otapi.OTAPI_Wrap_AppCleanup()
         webappThread.quit()
-        otapi.OTAPI_Basic_AppShutdown()
     app.aboutToQuit.connect(shutdown)
 
     # Start up

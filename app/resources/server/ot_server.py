@@ -2,7 +2,7 @@ from otapi import otapi
 
 
 def count():
-    result = otapi.OTAPI_Basic_GetServerCount()
+    result = otapi.OTAPI_Wrap_GetServerCount()
 
     if result < 1:
         return {'error': 'Sorry, there aren\'t any server contracts in this wallet.'}
@@ -14,17 +14,17 @@ def get_server_info(serverId):
 
     server = {}
     server["id"] = serverId
-    server["name"] = otapi.OTAPI_Basic_GetServer_Name(serverId)
+    server["name"] = otapi.OTAPI_Wrap_GetServer_Name(serverId)
 
     return {'server': server}
 
 
 def get_all():
-    nServerCount = otapi.OTAPI_Basic_GetServerCount()
+    nServerCount = otapi.OTAPI_Wrap_GetServerCount()
 
     servers = []
     for i in range(nServerCount):
-        strID = otapi.OTAPI_Basic_GetServer_ID(i)
+        strID = otapi.OTAPI_Wrap_GetServer_ID(i)
         server = get_server_info(strID)['server']
         servers.append(server)
 

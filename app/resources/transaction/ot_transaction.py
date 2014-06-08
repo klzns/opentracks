@@ -7,7 +7,7 @@ def send_transfer(myAccId, hisAccId, amount, memo):
     amount = str(amount)
     memo = str(memo)
 
-    myNymId = otapi.OTAPI_Basic_GetAccountWallet_NymID(myAccId)
+    myNymId = otapi.OTAPI_Wrap_GetAccountWallet_NymID(myAccId)
 
     if not myNymId:
         errorMessage = (
@@ -17,7 +17,7 @@ def send_transfer(myAccId, hisAccId, amount, memo):
         )
         return {'error': errorMessage}
 
-    myServerId = otapi.OTAPI_Basic_GetAccountWallet_ServerID(myAccId)
+    myServerId = otapi.OTAPI_Wrap_GetAccountWallet_ServerID(myAccId)
 
     if not myServerId:
         errorMessage = (
@@ -27,7 +27,7 @@ def send_transfer(myAccId, hisAccId, amount, memo):
         )
         return {'error': errorMessage}
 
-    hisServerId = otapi.OTAPI_Basic_GetAccountWallet_ServerID(hisAccId)
+    hisServerId = otapi.OTAPI_Wrap_GetAccountWallet_ServerID(hisAccId)
 
     if not hisServerId:
         print 'hisAcctId is not in the wallet, so I\'m assuming it\'s on the same server as myAccId. (Proceeding.)'
@@ -42,9 +42,9 @@ def send_transfer(myAccId, hisAccId, amount, memo):
         )
         return {'error': errorMessage}
 
-    assetTypeId = otapi.OTAPI_Basic_GetAccountWallet_AssetTypeID(myAccId)
+    assetTypeId = otapi.OTAPI_Wrap_GetAccountWallet_AssetTypeID(myAccId)
 
-    assetAmount = otapi.OTAPI_Basic_StringToAmount(assetTypeId, amount)
+    assetAmount = otapi.OTAPI_Wrap_StringToAmount(assetTypeId, amount)
 
     objEasy = otapi.OTMadeEasy()
 

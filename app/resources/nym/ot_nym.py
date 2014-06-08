@@ -2,7 +2,7 @@ from otapi import otapi
 
 
 def create():
-    result = otapi.OTAPI_Basic_CreateNym(1024, '', '')
+    result = otapi.OTAPI_Wrap_CreateNym(1024, '', '')
 
     if not result:
         return {'error': 'Failed to create Nym'}
@@ -23,7 +23,7 @@ def register(myNymId, serverId):
 
 
 def count():
-    result = otapi.OTAPI_Basic_GetNymCount()
+    result = otapi.OTAPI_Wrap_GetNymCount()
 
     if result < 1:
         return {'count': 0}
@@ -33,7 +33,7 @@ def count():
 def set_name(nym, name):
     nym = str(nym)
     name = str(name)
-    result = otapi.OTAPI_Basic_SetNym_Name(nym, nym, name)
+    result = otapi.OTAPI_Wrap_SetNym_Name(nym, nym, name)
 
     if not result:
         return {'error': 'Failed in OT_API_SetNym_Name(name == ' + name}
@@ -45,17 +45,17 @@ def get_nym_info(nymId):
 
     nym = {}
     nym["id"] = nymId
-    nym["name"] = otapi.OTAPI_Basic_GetNym_Name(nymId)
+    nym["name"] = otapi.OTAPI_Wrap_GetNym_Name(nymId)
 
     return {'nym': nym}
 
 
 def get_all():
-    nNymCount = otapi.OTAPI_Basic_GetNymCount()
+    nNymCount = otapi.OTAPI_Wrap_GetNymCount()
 
     nyms = []
     for i in range(nNymCount):
-        strID = otapi.OTAPI_Basic_GetNym_ID(i)
+        strID = otapi.OTAPI_Wrap_GetNym_ID(i)
         nym = get_nym_info(strID)['nym']
         nyms.append(nym)
 
@@ -65,7 +65,7 @@ def get_all():
 def outgoing(myNymId):
     myNymId = str(myNymId)
 
-    nCount = otapi.OTAPI_Basic_GetNym_OutpaymentsCount(myNymId)
+    nCount = otapi.OTAPI_Wrap_GetNym_OutpaymentsCount(myNymId)
     if nCount and nCount > 0:
         payments = []
         for i in range(nCount):
@@ -78,38 +78,38 @@ def outgoing(myNymId):
 
 def show_outpayment(strMyNym, nIndex):
 
-    bMailVerified = otapi.OTAPI_Basic_Nym_VerifyOutpaymentsByIndex(strMyNym, nIndex)
+    bMailVerified = otapi.OTAPI_Wrap_Nym_VerifyOutpaymentsByIndex(strMyNym, nIndex)
 
     if not bMailVerified:
         return {'error': 'UNVERIFIED sent (outgoing) payment! At index: ' + str(nIndex) + '\n bad result from OT_API_Nym_VerifyOutpaymentsByIndex at Index: ' + str(nIndex)}
 
-    strMailServerID = otapi.OTAPI_Basic_GetNym_OutpaymentsServerIDByIndex(strMyNym, nIndex)
-    strMailRecipientID = otapi.OTAPI_Basic_GetNym_OutpaymentsRecipientIDByIndex(strMyNym, nIndex)
-    strMailContents = otapi.OTAPI_Basic_GetNym_OutpaymentsContentsByIndex(strMyNym, nIndex)
+    strMailServerID = otapi.OTAPI_Wrap_GetNym_OutpaymentsServerIDByIndex(strMyNym, nIndex)
+    strMailRecipientID = otapi.OTAPI_Wrap_GetNym_OutpaymentsRecipientIDByIndex(strMyNym, nIndex)
+    strMailContents = otapi.OTAPI_Wrap_GetNym_OutpaymentsContentsByIndex(strMyNym, nIndex)
 
     if not strMailContents:
         return {'error': 'bad result from OT_API_GetNym_OutpaymentsContentsByIndex at Index: ' + str(nIndex)}
 
-    lPaymentAmount = otapi.OTAPI_Basic_Instrmnt_GetAmount(strMailContents)
+    lPaymentAmount = otapi.OTAPI_Wrap_Instrmnt_GetAmount(strMailContents)
     strPaymentAmount = 'UNKNOWN_PAYMENT_AMOUNT'
     if lPaymentAmount:
         strPaymentAmount = str(lPaymentAmount)
 
-    strPaymentAssetID = otapi.OTAPI_Basic_Instrmnt_GetAssetID(strMailContents)
-    strPaymentType = otapi.OTAPI_Basic_Instrmnt_GetType(strMailContents)
+    strPaymentAssetID = otapi.OTAPI_Wrap_Instrmnt_GetAssetID(strMailContents)
+    strPaymentType = otapi.OTAPI_Wrap_Instrmnt_GetType(strMailContents)
 
     if strMailRecipientID:
-        strRecipientName = otapi.OTAPI_Basic_GetNym_Name(strMailRecipientID)
+        strRecipientName = otapi.OTAPI_Wrap_GetNym_Name(strMailRecipientID)
         if not strRecipientName:
             strRecipientName = ""
 
     if strMailServerID:
-        strServerName = otapi.OTAPI_Basic_GetServer_Name(strMailServerID)
+        strServerName = otapi.OTAPI_Wrap_GetServer_Name(strMailServerID)
         if not strServerName:
             strServerName = ""
 
     if strPaymentAssetID:
-        strAssetTypeName = otapi.OTAPI_Basic_GetAssetType_Name(strPaymentAssetID)
+        strAssetTypeName = otapi.OTAPI_Wrap_GetAssetType_Name(strPaymentAssetID)
         if not strAssetTypeName:
             strAssetTypeName = ""
     else:
@@ -121,12 +121,12 @@ def show_outpayment(strMyNym, nIndex):
 
         strTempFormat = ''
         if lPaymentAmount > -1:
-            strTempFormat = otapi.OTAPI_Basic_FormatAmount(strPaymentAssetID, lPaymentAmount)
+            strTempFormat = otapi.OTAPI_Wrap_FormatAmount(strPaymentAssetID, lPaymentAmount)
 
         if not strTempFormat:
             strTempFormat = strPaymentAmount
 
-    strSenderName = otapi.OTAPI_Basic_GetNym_Name(myNymId)
+    strSenderName = otapi.OTAPI_Wrap_GetNym_Name(myNymId)
     if not strSenderName:
         strSenderName = ''
 
@@ -161,12 +161,12 @@ def incoming(myNymId, serverId):
     myNymId = str(myNymId)
     serverId = str(serverId)
 
-    strInbox = otapi.OTAPI_Basic_LoadPaymentInbox(serverId, myNymId)
+    strInbox = otapi.OTAPI_Wrap_LoadPaymentInbox(serverId, myNymId)
 
     if not strInbox:
         return {'error': 'Unable to load the payments inbox (probably doesn\'t exist yet.)\n(Nym/Server: '+myNymId+' / '+serverId}
 
-    nCount = otapi.OTAPI_Basic_Ledger_GetCount(serverId, myNymId, myNymId, strInbox)
+    nCount = otapi.OTAPI_Wrap_Ledger_GetCount(serverId, myNymId, myNymId, strInbox)
 
     if nCount and nCount > 0:
         payments = []
@@ -180,30 +180,30 @@ def incoming(myNymId, serverId):
 
 def show_incoming(serverId, myNymId, i):
 
-    strInstrument = otapi.OTAPI_Basic_Ledger_GetInstrument(serverId, myNymId, myNymId, strInbox, i)
+    strInstrument = otapi.OTAPI_Wrap_Ledger_GetInstrument(serverId, myNymId, myNymId, strInbox, i)
 
     if not strInstrument:
         return {'error': 'Failed trying to get payment instrument from payments box.'}
 
-    strTrans = otapi.OTAPI_Basic_Ledger_GetTransactionByIndex(serverId, myNymId, myNymId, strInbox, i)
-    lTransNumber = otapi.OTAPI_Basic_Ledger_GetTransactionIDByIndex(serverId, myNymId, myNymId, strInbox, i)
+    strTrans = otapi.OTAPI_Wrap_Ledger_GetTransactionByIndex(serverId, myNymId, myNymId, strInbox, i)
+    lTransNumber = otapi.OTAPI_Wrap_Ledger_GetTransactionIDByIndex(serverId, myNymId, myNymId, strInbox, i)
 
     if lTransNumber:
         strTransID = lTransNumber
     else:
         strTransID = "UNKNOWN_TRANS_NUM"
 
-    lRefNum = otapi.OTAPI_Basic_Transaction_GetDisplayReferenceToNum(serverId, myNymId, myNymId, strTrans)
-    lAmount = otapi.OTAPI_Basic_Instrmnt_GetAmount(strInstrument)
-    strType = otapi.OTAPI_Basic_Instrmnt_GetType(strInstrument)
-    strAssetType = otapi.OTAPI_Basic_Instrmnt_GetAssetID(strInstrument)
-    strSenderUserID = otapi.OTAPI_Basic_Instrmnt_GetSenderUserID(strInstrument)
-    strSenderAcctID = otapi.OTAPI_Basic_Instrmnt_GetSenderAcctID(strInstrument)
-    strRecipientUserID = otapi.OTAPI_Basic_Instrmnt_GetRecipientUserID(strInstrument)
-    strRecipientAcctID = otapi.OTAPI_Basic_Instrmnt_GetRecipientAcctID(strInstrument)
+    lRefNum = otapi.OTAPI_Wrap_Transaction_GetDisplayReferenceToNum(serverId, myNymId, myNymId, strTrans)
+    lAmount = otapi.OTAPI_Wrap_Instrmnt_GetAmount(strInstrument)
+    strType = otapi.OTAPI_Wrap_Instrmnt_GetType(strInstrument)
+    strAssetType = otapi.OTAPI_Wrap_Instrmnt_GetAssetID(strInstrument)
+    strSenderUserID = otapi.OTAPI_Wrap_Instrmnt_GetSenderUserID(strInstrument)
+    strSenderAcctID = otapi.OTAPI_Wrap_Instrmnt_GetSenderAcctID(strInstrument)
+    strRecipientUserID = otapi.OTAPI_Wrap_Instrmnt_GetRecipientUserID(strInstrument)
+    strRecipientAcctID = otapi.OTAPI_Wrap_Instrmnt_GetRecipientAcctID(strInstrument)
 
     if lAmount and strAssetType:
-        strAmount = otapi.OTAPI_Basic_FormatAmount(strAssetType, lAmount)
+        strAmount = otapi.OTAPI_Wrap_FormatAmount(strAssetType, lAmount)
     else:
         strAmount = "UNKNOWN_AMOUNT"
 
@@ -212,7 +212,7 @@ def show_incoming(serverId, myNymId, i):
     else:
         strAssetName = ''
 
-    strServerName = otapi.OTAPI_Basic_GetServer_Name(serverId)
+    strServerName = otapi.OTAPI_Wrap_GetServer_Name(serverId)
     if not strServerName:
         strServerName = ''
 

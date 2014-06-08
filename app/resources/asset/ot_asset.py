@@ -3,7 +3,7 @@ from resources.nym import ot_nym
 
 
 def count():
-    result = otapi.OTAPI_Basic_GetAssetTypeCount()
+    result = otapi.OTAPI_Wrap_GetAssetTypeCount()
 
     if result < 1:
         return {'count': 0}
@@ -15,17 +15,17 @@ def get_asset_info(assetId):
 
     asset = {}
     asset["id"] = assetId
-    asset["name"] = otapi.OTAPI_Basic_GetAssetType_Name(assetId)
+    asset["name"] = otapi.OTAPI_Wrap_GetAssetType_Name(assetId)
 
     return {'asset': asset}
 
 
 def get_all():
-    nAssetTypeCount = otapi.OTAPI_Basic_GetAssetTypeCount()
+    nAssetTypeCount = otapi.OTAPI_Wrap_GetAssetTypeCount()
 
     assets = []
     for i in range(nAssetTypeCount):
-        strID = otapi.OTAPI_Basic_GetAssetType_ID(i)
+        strID = otapi.OTAPI_Wrap_GetAssetType_ID(i)
         asset = get_asset_info(strID)['asset']
         assets.append(asset)
 
@@ -37,7 +37,7 @@ def issue(myNymId, serverId, contract):
     serverId = str(serverId)
     contract = str(contract)
 
-    if not otapi.OTAPI_Basic_IsNym_RegisteredAtServer(myNymId, serverId):
+    if not otapi.OTAPI_Wrap_IsNym_RegisteredAtServer(myNymId, serverId):
         # If the Nym's not registered at the server, then register him first.
         result = ot_nym.register(myNymId, serverId)
         if 'error' in result:
