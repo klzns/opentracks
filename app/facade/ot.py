@@ -1,9 +1,5 @@
 from otapi import otapi
-from resources.nym import ot_nym
-from resources.server import ot_server
-from resources.wallet import ot_wallet
-from resources.asset import ot_asset
-from resources.account import ot_account
+from resources import *
 
 
 def stat():

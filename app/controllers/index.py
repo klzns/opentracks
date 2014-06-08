@@ -1,12 +1,12 @@
-from flask import Blueprint, render_template, jsonify, request, session
-from flask import redirect, url_for
-from import_resources import *
-from database import db
+from flask import Blueprint, render_template, session, redirect, url_for
+from resources import *
+from models.database import db
+from facade import ot
 
-mod_web = Blueprint('web', __name__)
+mod_c_index = Blueprint('controller_index', __name__)
 
 
-@mod_web.route('/')
+@mod_c_index.route('/')
 def index():
     # Check if user has a server registered
     serverCount = ot_server.count()
@@ -51,7 +51,7 @@ def index():
     return render_template(TEMPLATE_FILE)
 
 
-@mod_web.route('/setup')
+@mod_c_index.route('/setup')
 def setup():
     if 'setup' not in session:
         return redirect(url_for('web.index'))
@@ -85,44 +85,3 @@ def setup():
         return redirect(url_for('web.index'))
 
     return render_template(TEMPLATE_FILE)
-
-
-@mod_web.route('/nym/<string:nym>/', methods=['GET'])
-def nym_page(nym):
-    accounts = ot_account.accounts_for_nym(nym)['accounts']
-    return render_template('nym/nym.html', accounts=accounts)
-
-
-@mod_web.route('/account/<string:accountId>', methods=['GET'])
-def account_page(accountId):
-    account = ot_account.get_account_info(accountId)['account']
-
-    inbox = ot_account.inbox(accountId)
-    if 'error' in inbox:
-        return jsonify(inbox), 500
-
-    outbox = ot_account.outbox(accountId)
-    if 'error' in outbox:
-        return jsonify(outbox), 500
-
-    return render_template('account/account.html', account=account,
-                           inbox=inbox, outbox=outbox)
-
-
-@mod_web.route('/account/<string:accountId>/transaction', methods=['GET'])
-def account_transaction_page(accountId):
-    account = ot_account.get_account_info(accountId)['account']
-
-    return render_template('account/transaction.html', account=account)
-
-
-def set_setup_session():
-    nyms = ot_nym.get_all()
-    session['myNymId'] = nyms['nyms'][0]['id']
-    servers = ot_server.get_all()
-    session['serverId'] = servers['servers'][0]['id']
-
-
-@mod_web.route('/stat')
-def stat():
-    return jsonify(ot.stat())
