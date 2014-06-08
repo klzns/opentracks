@@ -35,7 +35,7 @@ def register(serverId, myNymId):
     serverId = str(serverId)
     myNymId = str(myNymId)
 
-    objEasy = otapi.OTMadeEasy()
+    objEasy = otapi.OT_ME()
 
     strResponse = objEasy.register_nym(serverId, myNymId)
     nSuccess = int(strResponse)

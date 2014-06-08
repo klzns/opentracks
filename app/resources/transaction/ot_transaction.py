@@ -46,7 +46,7 @@ def send_transfer(myAccId, hisAccId, amount, memo):
 
     assetAmount = otapi.OTAPI_Wrap_StringToAmount(assetTypeId, amount)
 
-    objEasy = otapi.OTMadeEasy()
+    objEasy = otapi.OT_ME()
 
     response = objEasy.send_transfer(myServerId, myNymId, myAccId,
                                      hisAccId, assetAmount, memo)

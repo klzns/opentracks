@@ -13,7 +13,7 @@ def register(myNymId, serverId):
     myNymId = str(myNymId)
     serverId = str(serverId)
 
-    objEasy = otapi.OTMadeEasy()
+    objEasy = otapi.OT_ME()
     result = objEasy.register_nym(serverId, myNymId)
 
     if result:

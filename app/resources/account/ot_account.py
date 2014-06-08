@@ -96,7 +96,7 @@ def create_account(myNymId, serverId, assetId):
         if 'error' in result:
             return result
 
-    objEasy = otapi.OTMadeEasy()
+    objEasy = otapi.OT_ME()
     result = objEasy.create_asset_acct(serverId, myNymId, assetId)
 
     if result:
@@ -270,7 +270,7 @@ def refresh(myAccId):
     myNymId = otapi.OTAPI_Wrap_GetAccountWallet_NymID(myAccId)
     serverId = otapi.OTAPI_Wrap_GetAccountWallet_ServerID(myAccId)
 
-    objEasy = otapi.OTMadeEasy()
+    objEasy = otapi.OT_ME()
 
     result = objEasy.retrieve_account(serverId, myNymId, myAccId, True)
 
@@ -309,7 +309,7 @@ def accept_inbox_items(myAccId, nItemType, strIndices):
     # one clear-cut case where we _do_ have to. Otherwise our balance agreement
     # will fail anyway. So hopefully we can let OT "be smart about it" here instead
     # of just forcing it to download every time even when unnecessary.
-    objEasy = otapi.OTMadeEasy()
+    objEasy = otapi.OT_ME()
 
     result = objEasy.retrieve_account(serverId, myNymId, myAccId, False)
     if not result:
@@ -634,7 +634,7 @@ def handle_payment_index(myAccId, nIndex, strPaymentType, strInbox):
     if nIndex == -1:
         return {'error': "You must specify an index in the payments inbox"}
     else:  # Use an instrument from the payments inbox, since a valid index was provided.
-        objEasy = otapi.OTMadeEasy()
+        objEasy = otapi.OT_ME()
 
         # strInbox is optional and avoids having to load it multiple times. This function will just load it itself, if it has to.
         instrument = objEasy.get_payment_instrument(serverId, myNymId, nIndex, strInbox)
@@ -779,7 +779,7 @@ def deposit_cheque(serverId, myAccId, myNymId, instrument, type):
         return {'error': errorMessage}
 
     # Here, we send the deposit cheque request to the server
-    objEasy = otapi.OTMadeEasy()
+    objEasy = otapi.OT_ME()
     strResponse = objEasy.deposit_cheque(serverId, myNymId, myAccId, instrument)
     strAttempt = 'deposit_cheque'
 

@@ -43,7 +43,7 @@ def issue(myNymId, serverId, contract):
         if 'error' in result:
             return result
 
-    objEasy = otapi.OTMadeEasy()
+    objEasy = otapi.OT_ME()
     result = objEasy.issue_asset_type(serverId, myNymId, contract)
 
     if result:
