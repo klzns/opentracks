@@ -32,9 +32,6 @@ app.register_blueprint(mod_facade)
 
 # If this file is called directly
 if __name__ == '__main__':
-    global webapp
-    webapp = True
-
     # Open-Transactions setup
     otapi.OTAPI_Wrap_AppInit()
     otapi.OTAPI_Wrap_LoadWallet()
