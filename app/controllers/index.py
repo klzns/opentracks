@@ -36,7 +36,7 @@ def index():
             session['setup'] = 4
         else:
             session['setup'] = 5
-        return redirect(url_for('web.setup'))
+        return redirect(url_for('controller_index.setup'))
 
     if serverCount == 0:
         TEMPLATE_FILE = 'server/new.html'
@@ -54,7 +54,7 @@ def index():
 @mod_c_index.route('/setup')
 def setup():
     if 'setup' not in session:
-        return redirect(url_for('web.index'))
+        return redirect(url_for('controller_index.index'))
 
     if session['setup'] == 1:
         TEMPLATE_FILE = 'setup/step1.html'
@@ -82,6 +82,6 @@ def setup():
         return render_template(TEMPLATE_FILE, myAccId=myAccId)
     else:
         session.pop('setup', None)
-        return redirect(url_for('web.index'))
+        return redirect(url_for('controller_index.index'))
 
     return render_template(TEMPLATE_FILE)
