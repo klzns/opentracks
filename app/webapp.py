@@ -13,12 +13,12 @@ db.init_app(app)
 
 # Set REST API blueprints
 from resources import *
-app.register_blueprint(api_account.mod_account)
-app.register_blueprint(api_asset.mod_asset)
-app.register_blueprint(api_nym.mod_nym)
-app.register_blueprint(api_server.mod_server)
-app.register_blueprint(api_wallet.mod_wallet)
-app.register_blueprint(api_transaction.mod_transaction)
+app.register_blueprint(api_account.mod_account, url_prefix='/api')
+app.register_blueprint(api_asset.mod_asset, url_prefix='/api')
+app.register_blueprint(api_nym.mod_nym, url_prefix='/api')
+app.register_blueprint(api_server.mod_server, url_prefix='/api')
+app.register_blueprint(api_wallet.mod_wallet, url_prefix='/api')
+app.register_blueprint(api_transaction.mod_transaction, url_prefix='/api')
 
 # Set Controllers blueprints
 from controllers import *
