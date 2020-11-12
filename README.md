@@ -12,7 +12,7 @@ I don't know any alternatives to suggest. Please, feel free to open an issue if 
 ![Open Tracks](https://i.imgur.com/dmVkN64.png)
 
 ### Videos
-Task | Moneychange client | Open Tracks client
+Task | Moneychanger client | Open Tracks client
 ---|---|---
 Creating a new wallet| https://youtu.be/s57d4uuPPcY | https://youtu.be/MW2twRRfZN0
 Making a transaction | https://youtu.be/9STYmhu-lVE | https://youtu.be/MqaiNNLPRcQ
