@@ -4,13 +4,19 @@
 
 Open Tracks is an [Open-Transactions](http://opentransactions.org/) client built with Python.
 
-## Deprecated
-This project is deprecated.
+## Unmaintained
+This project is not maintained.
 
 I don't know any alternatives to suggest. Please, feel free to open an issue if you do find out.
 
 ![Open Tracks](https://i.imgur.com/dmVkN64.png)
 
-Check out some [screenshots](https://imgur.com/a/BYQ24)
+### Videos
+Task | Moneychange client | Open Tracks client
+---|---|---
+Creating a new wallet| https://youtu.be/s57d4uuPPcY | https://youtu.be/MW2twRRfZN0
+Making a transaction | https://youtu.be/9STYmhu-lVE | https://youtu.be/MqaiNNLPRcQ
+
+Open Tracks [screenshots](https://imgur.com/a/BYQ24)
 
 Interested? Please take 10 minutes to read our [Wiki](https://github.com/brenoc/opentracks/wiki).
